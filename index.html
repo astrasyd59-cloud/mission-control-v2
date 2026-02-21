@@ -458,37 +458,13 @@
                         Tasks
                     </h2>
                     <div style="display: flex; gap: var(--spacing-sm);">
+                        <button class="btn btn-secondary" onclick="syncWithGoogleCalendar()">🔗 Sync Google</button>
                         <button class="btn btn-secondary" onclick="showCompletedHistory()">📊 History</button>
                         <button class="btn btn-secondary" onclick="clearCompletedTodos()">Clear Done</button>
                     </div>
                 </div>
                 <div class="tasks-container" id="tasksContainer">
-                    <!-- 5 fixed task lines -->
-                    <div class="task-line" id="task-line-0">
-                        <div class="task-checkbox" id="task-check-0" onclick="toggleFixedTask(0)"></div>
-                        <input type="text" class="task-input" id="task-input-0" placeholder="Task 1..." onblur="saveFixedTasks()">
-                        <button class="task-delete" onclick="clearFixedTask(0)">×</button>
-                    </div>
-                    <div class="task-line" id="task-line-1">
-                        <div class="task-checkbox" id="task-check-1" onclick="toggleFixedTask(1)"></div>
-                        <input type="text" class="task-input" id="task-input-1" placeholder="Task 2..." onblur="saveFixedTasks()">
-                        <button class="task-delete" onclick="clearFixedTask(1)">×</button>
-                    </div>
-                    <div class="task-line" id="task-line-2">
-                        <div class="task-checkbox" id="task-check-2" onclick="toggleFixedTask(2)"></div>
-                        <input type="text" class="task-input" id="task-input-2" placeholder="Task 3..." onblur="saveFixedTasks()">
-                        <button class="task-delete" onclick="clearFixedTask(2)">×</button>
-                    </div>
-                    <div class="task-line" id="task-line-3">
-                        <div class="task-checkbox" id="task-check-3" onclick="toggleFixedTask(3)"></div>
-                        <input type="text" class="task-input" id="task-input-3" placeholder="Task 4..." onblur="saveFixedTasks()">
-                        <button class="task-delete" onclick="clearFixedTask(3)">×</button>
-                    </div>
-                    <div class="task-line" id="task-line-4">
-                        <div class="task-checkbox" id="task-check-4" onclick="toggleFixedTask(4)"></div>
-                        <input type="text" class="task-input" id="task-input-4" placeholder="Task 5..." onblur="saveFixedTasks()">
-                        <button class="task-delete" onclick="clearFixedTask(4)">×</button>
-                    </div>
+                    <!-- Tasks rendered by JS -->
                 </div>
                 <button class="add-task-btn" onclick="addNewTaskLine()">+ Add Another Task</button>
             </div>
@@ -921,47 +897,141 @@
             document.getElementById('daysToGoal').textContent = daysRemaining > 0 ? daysRemaining : 0;
         }
 
-        // FIXED TASKS SYSTEM - 5 LINES + EXTRA
-        let currentCalendarDate = new Date();
-        
-        // Check if we need to populate initial tasks (first run or update)
-        const tasksVersion = localStorage.getItem('mc_tasksVersion');
-        const shouldPopulateTasks = !tasksVersion || tasksVersion !== 'v2';
-        
-        let fixedTasks = JSON.parse(localStorage.getItem('mc_fixedTasks')) || [
-            { text: 'Sort out SQL database setup', completed: false },
-            { text: 'Sync Google Calendar with Mission Control calendar', completed: false },
-            { text: 'Set up Gmail email reading automation', completed: false },
-            { text: '', completed: false },
-            { text: '', completed: false }
+        // TASK SYSTEM - COMPLETE REWRITE
+        const DEFAULT_TASKS = [
+            'Sort out SQL database setup',
+            'Sync Google Calendar with Mission Control calendar',
+            'Set up Gmail email reading automation',
+            'Scrape Twitter/X for trading news',
+            'Integrate Google API for news feed'
         ];
-        
-        // Force populate tasks on first run/update with all requested tasks
-        if (shouldPopulateTasks) {
-            fixedTasks = [
-                { text: 'Sort out SQL database setup', completed: false },
-                { text: 'Sync Google Calendar with Mission Control calendar', completed: false },
-                { text: 'Set up Gmail email reading automation', completed: false },
-                { text: '', completed: false },
-                { text: '', completed: false }
-            ];
-            extraTasks = [
-                { text: 'Scrape Twitter/X for trading news', completed: false },
-                { text: 'Integrate Google API for news feed', completed: false }
-            ];
-            localStorage.setItem('mc_fixedTasks', JSON.stringify(fixedTasks));
-            localStorage.setItem('mc_extraTasks', JSON.stringify(extraTasks));
-            localStorage.setItem('mc_tasksVersion', 'v2');
+
+        // Initialize tasks with defaults if empty
+        let taskData = JSON.parse(localStorage.getItem('mc_tasksData')) || {
+            version: 'v3',
+            tasks: DEFAULT_TASKS.map((text, i) => ({
+                id: i,
+                text: text,
+                completed: false
+            }))
+        };
+
+        // Force reset if version mismatch
+        if (taskData.version !== 'v3') {
+            taskData = {
+                version: 'v3',
+                tasks: DEFAULT_TASKS.map((text, i) => ({
+                    id: i,
+                    text: text,
+                    completed: false
+                }))
+            };
+            localStorage.setItem('mc_tasksData', JSON.stringify(taskData));
         }
-        
-        let extraTasks = JSON.parse(localStorage.getItem('mc_extraTasks')) || [];
+
         let completedTasksDB = JSON.parse(localStorage.getItem('mc_completedDB')) || [];
 
-        function loadFixedTasks() {
-            // Load first 5 fixed tasks
-            for (let i = 0; i < 5; i++) {
-                const task = fixedTasks[i] || { text: '', completed: false };
-                const input = document.getElementById(`task-input-${i}`);
+        function renderAllTasks() {
+            const container = document.getElementById('tasksContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            taskData.tasks.forEach((task, index) => {
+                const line = document.createElement('div');
+                line.className = 'task-line';
+                line.innerHTML = `
+                    <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask(${index})">
+                        ${task.completed ? '✓' : ''}
+                    </div>
+                    <input type="text" class="task-input" value="${task.text}" 
+                        placeholder="Task ${index + 1}..." 
+                        onchange="updateTaskText(${index}, this.value)"
+                        onblur="saveAllTasks()">
+                    <button class="task-delete" onclick="deleteTask(${index})">×</button>
+                `;
+                container.appendChild(line);
+            });
+        }
+
+        function toggleTask(index) {
+            taskData.tasks[index].completed = !taskData.tasks[index].completed;
+            
+            if (taskData.tasks[index].completed && taskData.tasks[index].text.trim()) {
+                completedTasksDB.push({
+                    text: taskData.tasks[index].text,
+                    completedAt: new Date().toISOString()
+                });
+                localStorage.setItem('mc_completedDB', JSON.stringify(completedTasksDB));
+            }
+            
+            saveAllTasks();
+            renderAllTasks();
+        }
+
+        function updateTaskText(index, text) {
+            taskData.tasks[index].text = text;
+        }
+
+        function deleteTask(index) {
+            taskData.tasks.splice(index, 1);
+            saveAllTasks();
+            renderAllTasks();
+        }
+
+        function addNewTaskLine() {
+            taskData.tasks.push({
+                id: Date.now(),
+                text: '',
+                completed: false
+            });
+            saveAllTasks();
+            renderAllTasks();
+        }
+
+        function saveAllTasks() {
+            // Update from DOM
+            const inputs = document.querySelectorAll('#tasksContainer .task-input');
+            inputs.forEach((input, index) => {
+                if (taskData.tasks[index]) {
+                    taskData.tasks[index].text = input.value;
+                }
+            });
+            localStorage.setItem('mc_tasksData', JSON.stringify(taskData));
+        }
+
+        function clearCompletedTodos() {
+            taskData.tasks = taskData.tasks.filter(t => !t.completed);
+            saveAllTasks();
+            renderAllTasks();
+        }
+
+        function showCompletedHistory() {
+            const now = new Date();
+            const thisMonth = completedTasksDB.filter(t => {
+                const date = new Date(t.completedAt);
+                return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+            });
+            
+            const totalCompleted = completedTasksDB.length;
+            const thisMonthCount = thisMonth.length;
+            
+            const message = `📊 TASK ANALYTICS
+
+Active Tasks: ${taskData.tasks.length}
+This Month Completed: ${thisMonthCount}
+Total History: ${totalCompleted}
+
+Recent Completed:
+${completedTasksDB.slice(-5).map(t => '✓ ' + t.text.substring(0, 30)).join('\n')}`;
+            
+            alert(message);
+        }
+
+        // GOOGLE CALENDAR SYNC (placeholder for future)
+        function syncWithGoogleCalendar() {
+            alert('🔗 Google Calendar Sync\n\nThis will:\n• Import your Google Calendar events\n• Sync tasks with Google Tasks\n• Show events on Mission Control calendar\n\nRequires Google OAuth setup. Coming soon!');
+        }
                 const checkbox = document.getElementById(`task-check-${i}`);
                 if (input) input.value = task.text;
                 if (checkbox) {
@@ -1317,7 +1387,7 @@ Want me to integrate any of these?`;
             loadBriefing();
             updateClock();
             generateCalendar();
-            loadFixedTasks();
+            renderAllTasks();
             
             // Auto-fetch crypto prices after a short delay
             setTimeout(fetchCryptoPrices, 500);
