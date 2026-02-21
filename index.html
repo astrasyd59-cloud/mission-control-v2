@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="cache-control" content="no-cache">
+    <meta name="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta name="pragma" content="no-cache">
+    <meta name="expires" content="0">
+    <meta name="version" content="6.3.2">
     <title>Mission Control | Dibs</title>
+    <script>
+        // Cache-busting: force fresh load
+        window.MC_VERSION = '6.3.2-' + Date.now();
+        console.log('[Mission Control] Version:', window.MC_VERSION);
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -465,7 +473,6 @@
                 <div class="tasks-container" id="tasksContainer">
                     <!-- Tasks rendered by JS -->
                 </div>
-                <button class="add-task-btn" onclick="addNewTaskLine()">+ Add Another Task</button>
             </div>
 
             <!-- NEWS BRIEFING -->
@@ -942,21 +949,25 @@
         let completedTasksDB = JSON.parse(localStorage.getItem('mc_completedDB')) || [];
 
         function renderAllTasks() {
+            console.log('[Mission Control] Rendering tasks...');
             const container = document.getElementById('tasksContainer');
-            if (!container) return;
+            if (!container) {
+                console.error('[Mission Control] tasksContainer not found!');
+                return;
+            }
 
             container.innerHTML = '';
 
-            // Always show at least 5 task lines
-            const displayTasks = taskData.tasks.length > 0 ? taskData.tasks : [
-                { id: 0, text: '', completed: false },
-                { id: 1, text: '', completed: false },
-                { id: 2, text: '', completed: false },
-                { id: 3, text: '', completed: false },
-                { id: 4, text: '', completed: false }
-            ];
+            // STRICTLY enforce exactly 5 tasks max
+            if (taskData.tasks.length > 5) {
+                taskData.tasks = taskData.tasks.slice(0, 5);
+                localStorage.setItem('mc_tasksData', JSON.stringify(taskData));
+            }
 
-            // Ensure at least 5 lines
+            // Always show exactly 5 task lines
+            const displayTasks = taskData.tasks.length > 0 ? taskData.tasks : [];
+
+            // Ensure exactly 5 lines (pad with empties if needed)
             while (displayTasks.length < 5) {
                 displayTasks.push({ id: Date.now() + displayTasks.length, text: '', completed: false });
             }
@@ -1004,6 +1015,11 @@
         }
 
         function addNewTaskLine() {
+            // STRICT LIMIT: Only add if less than 5 tasks
+            if (taskData.tasks.length >= 5) {
+                console.log('[Mission Control] Task limit reached (5 max)');
+                return;
+            }
             taskData.tasks.push({
                 id: Date.now(),
                 text: '',
@@ -1242,17 +1258,50 @@ Want me to integrate any of these?`;
         }
 
         // INIT - Auto-load everything
-        let currentCalendarDate = new Date(); // Initialize calendar date
+        let currentCalendarDate = new Date();
 
-        document.addEventListener('DOMContentLoaded', function() {
-            updateClock();
-            generateCalendar();
-            renderAllTasks();
-            loadBriefing();
-            fetchCryptoPrices();
+        function initMissionControl() {
+            console.log('[Mission Control] Initializing...');
+            
+            try {
+                updateClock();
+                console.log('[Mission Control] Clock initialized');
+                
+                generateCalendar();
+                console.log('[Mission Control] Calendar initialized');
+                
+                renderAllTasks();
+                console.log('[Mission Control] Tasks initialized');
+                
+                loadBriefing();
+                console.log('[Mission Control] Briefing loaded');
+                
+                fetchCryptoPrices();
+                console.log('[Mission Control] Crypto prices fetched');
+                
+                setInterval(updateClock, 1000);
+                setInterval(fetchCryptoPrices, 300000);
+                
+                console.log('[Mission Control] Initialization complete ✓');
+            } catch (error) {
+                console.error('[Mission Control] Initialization error:', error);
+            }
+        }
 
-            setInterval(updateClock, 1000);
-            setInterval(fetchCryptoPrices, 300000); // Refresh every 5 minutes
+        // Multiple initialization strategies for reliability
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMissionControl);
+        } else {
+            initMissionControl();
+        }
+
+        // Backup: also run after window load
+        window.addEventListener('load', function() {
+            if (!window.mcInitialized) {
+                console.log('[Mission Control] Backup initialization triggered');
+                initMissionControl();
+                window.mcInitialized = true;
+            }
         });
     </script>
 </body>
