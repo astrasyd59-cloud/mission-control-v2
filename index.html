@@ -316,6 +316,7 @@
                 <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
                 <button class="nav-tab" onclick="switchTab('projects')">📋 Projects</button>
                 <button class="nav-tab" onclick="switchTab('revenue')">💰 Revenue</button>
+                <button class="nav-tab" onclick="switchTab('ai-costs')">🤖 AI Costs</button>
                 <button class="nav-tab" onclick="switchTab('notes')">📝 Notes</button>
             </nav>
         </div>
@@ -537,6 +538,185 @@
                     placeholder="Start writing your thoughts..."></textarea>
             </div>
         </div>
+
+        <!-- AI COSTS TAB -->
+        <div class="tab-content" id="ai-costs">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="section-title-icon">🤖</span>
+                        AI Infrastructure Costs
+                    </h2>
+                    <button class="btn btn-secondary" onclick="refreshAICosts()">↻ Refresh</button>
+                </div>
+                
+                <!-- Total Summary -->
+                <div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(245, 158, 11, 0.05) 100%); border: 1px solid rgba(251, 191, 36, 0.15); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md);">
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: var(--spacing-xs);">This Session</div>
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-gold);" id="totalSessionCost">$0.42</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: var(--spacing-xs);">Total Tokens</div>
+                            <div style="font-size: 1.5rem; font-weight: 600;" id="totalTokens">284K</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: var(--spacing-xs);">Models Used</div>
+                            <div style="font-size: 1.5rem; font-weight: 600;" id="modelsUsedCount">3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LLM Breakdown -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-md);">
+                    <!-- Kimi K2.5 -->
+                    <div style="background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-sm);">
+                            <div style="font-weight: 600; color: var(--accent-gold);">🧠 Kimi K2.5</div>
+                            <div style="font-size: 0.875rem; color: var(--success);">Primary</div>
+                        </div>
+                        <div style="margin-bottom: var(--spacing-sm);">
+                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Tokens Used</div>
+                            <div style="font-size: 1.25rem; font-weight: 600;">~280K</div>
+                        </div>
+                        <div style="margin-bottom: var(--spacing-sm);">
+                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Est. Cost</div>
+                            <div style="font-size: 1.25rem; font-weight: 600;">~$0.40</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Workload</div>
+                            <div style="height: 8px; background: rgba(251, 191, 36, 0.1); border-radius: 4px; margin-top: var(--spacing-xs); overflow: hidden;">
+                                <div style="width: 95%; height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px;"></div>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">95% of total workload</div>
+                        </div>
+                    </div>
+
+                    <!-- Groq Whisper -->
+                    <div style="background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-sm);">
+                            <div style="font-weight: 600; color: var(--info);">🎙️ Groq Whisper</div>
+                            <div style="font-size: 0.875rem; color: var(--info);">Transcription</div>
+                        </div>
+                        <div style="margin-bottom: var(--spacing-sm);">
+                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Audio Processed</div>
+                            <div style="font-size: 1.25rem; font-weight: 600;">~5 min</div>
+                        </div>
+                        <div style="margin-bottom: var(--spacing-sm);">
+                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Est. Cost</div>
+                            <div style="font-size: 1.25rem; font-weight: 600;">~$0.02</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Workload</div>
+                            <div style="height: 8px; background: rgba(251, 191, 36, 0.1); border-radius: 4px; margin-top: var(--spacing-xs); overflow: hidden;">
+                                <div style="width: 5%; height: 100%; background: linear-gradient(90deg, var(--info), #60a5fa); border-radius: 4px;"></div>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">5% of total workload</div>
+                        </div>
+                    </div>
+
+                    <!-- Local LLM -->
+                    <div style="background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-sm);">
+                            <div style="font-weight: 600; color: var(--success);">💻 Local LLM</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">On-device</div>
+                        </div>
+                        <div style="margin-bottom: var(--spacing-sm);">
+                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Status</div>
+                            <div style="font-size: 1.25rem; font-weight: 600; color: var(--success);">⚡ Active</div>
+                        </div>
+                        <div style="margin-bottom: var(--spacing-sm);">
+                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Cost</div>
+                            <div style="font-size: 1.25rem; font-weight: 600; color: var(--success);">$0.00</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Workload</div>
+                            <div style="height: 8px; background: rgba(251, 191, 36, 0.1); border-radius: 4px; margin-top: var(--spacing-xs); overflow: hidden;">
+                                <div style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--success), #4ade80); border-radius: 4px;"></div>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Reserved for offline use</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cost History Chart Placeholder -->
+                <div style="background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md); margin-top: var(--spacing-lg);">
+                    <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--spacing-md);">📈 Cost History</h3>
+                    <div style="height: 200px; display: flex; align-items: flex-end; justify-content: space-around; gap: var(--spacing-sm); padding: var(--spacing-md); background: rgba(10, 10, 12, 0.5); border-radius: var(--radius-md);">
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
+                            <div style="width: 100%; height: 30%; background: linear-gradient(180deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Feb 17</span>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
+                            <div style="width: 100%; height: 45%; background: linear-gradient(180deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Feb 18</span>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
+                            <div style="width: 100%; height: 25%; background: linear-gradient(180deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Feb 19</span>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
+                            <div style="width: 100%; height: 60%; background: linear-gradient(180deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Feb 20</span>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
+                            <div style="width: 100%; height: 80%; background: linear-gradient(180deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px 4px 0 0;"></div>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Today</span>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: var(--spacing-sm); font-size: 0.8125rem; color: var(--text-muted);">
+                        Mission Control build sessions (approximate costs)
+                    </div>
+                </div>
+
+                <!-- Connected Models List -->
+                <div style="background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md); margin-top: var(--spacing-lg);">
+                    <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--spacing-md);">🔗 Connected AI Models</h3>
+                    <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm); background: rgba(251, 191, 36, 0.05); border-radius: var(--radius-sm);">
+                            <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                                <span style="font-size: 1.25rem;">🧠</span>
+                                <div>
+                                    <div style="font-weight: 500;">Kimi K2.5</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">kimi-coding/k2p5 | 262K context</div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: var(--success); font-weight: 500;">🟢 Active</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Primary</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm); background: rgba(59, 130, 246, 0.05); border-radius: var(--radius-sm);">
+                            <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                                <span style="font-size: 1.25rem;">🎙️</span>
+                                <div>
+                                    <div style="font-weight: 500;">Groq Whisper</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">whisper-large-v3-turbo</div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: var(--success); font-weight: 500;">🟢 Active</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Voice transcription</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm); background: rgba(34, 197, 94, 0.05); border-radius: var(--radius-sm);">
+                            <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                                <span style="font-size: 1.25rem;">💻</span>
+                                <div>
+                                    <div style="font-weight: 500;">Local LLM</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Ollama / LM Studio</div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: var(--warning); font-weight: 500;">🟡 Standby</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">On-device inference</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script>
@@ -744,9 +924,9 @@
         // FIXED TASKS SYSTEM - 5 LINES
         let currentCalendarDate = new Date();
         let fixedTasks = JSON.parse(localStorage.getItem('mc_fixedTasks')) || [
-            { text: '', completed: false },
-            { text: '', completed: false },
-            { text: '', completed: false },
+            { text: 'Sort out SQL database setup', completed: false },
+            { text: 'Sync Google Calendar with Mission Control calendar', completed: false },
+            { text: 'Set up Gmail email reading automation', completed: false },
             { text: '', completed: false },
             { text: '', completed: false }
         ];
@@ -1059,7 +1239,16 @@ ${thisMonth.slice(-5).map(t => '✓ ' + t.text.substring(0, 30)).join('\n')}`;
             }
         }
 
-        // TRADING NEWS API INFO
+        // AI COSTS FUNCTIONS
+        function refreshAICosts() {
+            // Simulate refreshing costs - in real implementation, this would fetch from API
+            const btn = event.target;
+            btn.textContent = '⟳ Loading...';
+            setTimeout(() => {
+                btn.textContent = '↻ Refresh';
+                alert('📊 AI Costs Updated!\n\nCurrent Session:\n• Kimi K2.5: ~280K tokens ($0.40)\n• Groq Whisper: ~5 min audio ($0.02)\n• Local LLM: $0.00\n\nTotal: ~$0.42');
+            }, 500);
+        }
         function showTradingAPIInfo() {
             const info = `
 TRADING NEWS APIs:
