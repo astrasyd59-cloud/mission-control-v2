@@ -921,8 +921,13 @@
             document.getElementById('daysToGoal').textContent = daysRemaining > 0 ? daysRemaining : 0;
         }
 
-        // FIXED TASKS SYSTEM - 5 LINES
+        // FIXED TASKS SYSTEM - 5 LINES + EXTRA
         let currentCalendarDate = new Date();
+        
+        // Check if we need to populate initial tasks (first run or update)
+        const tasksVersion = localStorage.getItem('mc_tasksVersion');
+        const shouldPopulateTasks = !tasksVersion || tasksVersion !== 'v2';
+        
         let fixedTasks = JSON.parse(localStorage.getItem('mc_fixedTasks')) || [
             { text: 'Sort out SQL database setup', completed: false },
             { text: 'Sync Google Calendar with Mission Control calendar', completed: false },
@@ -930,6 +935,25 @@
             { text: '', completed: false },
             { text: '', completed: false }
         ];
+        
+        // Force populate tasks on first run/update with all requested tasks
+        if (shouldPopulateTasks) {
+            fixedTasks = [
+                { text: 'Sort out SQL database setup', completed: false },
+                { text: 'Sync Google Calendar with Mission Control calendar', completed: false },
+                { text: 'Set up Gmail email reading automation', completed: false },
+                { text: '', completed: false },
+                { text: '', completed: false }
+            ];
+            extraTasks = [
+                { text: 'Scrape Twitter/X for trading news', completed: false },
+                { text: 'Integrate Google API for news feed', completed: false }
+            ];
+            localStorage.setItem('mc_fixedTasks', JSON.stringify(fixedTasks));
+            localStorage.setItem('mc_extraTasks', JSON.stringify(extraTasks));
+            localStorage.setItem('mc_tasksVersion', 'v2');
+        }
+        
         let extraTasks = JSON.parse(localStorage.getItem('mc_extraTasks')) || [];
         let completedTasksDB = JSON.parse(localStorage.getItem('mc_completedDB')) || [];
 
