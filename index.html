@@ -2,312 +2,125 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="cache-control" content="no-cache, no-store, must-revalidate">
     <meta name="pragma" content="no-cache">
-    <meta name="expires" content="0">
-    <meta name="version" content="6.3.2">
     <title>Mission Control | Dibs</title>
-    <script>
-        // Cache-busting: force fresh load
-        window.MC_VERSION = '6.3.2-' + Date.now();
-        console.log('[Mission Control] Version:', window.MC_VERSION);
-    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0c;
-            --bg-secondary: #0f0f12;
-            --bg-tertiary: #141418;
-            --bg-glass: rgba(20, 20, 24, 0.9);
-            --accent-gold: #fbbf24;
-            --accent-amber: #f59e0b;
-            --accent-bronze: #d97706;
-            --accent-gold-glow: rgba(251, 191, 36, 0.3);
-            --text-primary: #fafaf9;
-            --text-secondary: #e7e5e4;
-            --text-muted: #a8a29e;
-            --success: #22c55e;
-            --success-glow: rgba(34, 197, 94, 0.2);
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --danger-glow: rgba(239, 68, 68, 0.2);
-            --info: #3b82f6;
-            --spacing-xs: 0.5rem; --spacing-sm: 0.75rem; --spacing-md: 1rem; --spacing-lg: 1.5rem; --spacing-xl: 2rem; --spacing-2xl: 3rem;
-            --radius-sm: 6px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 24px;
-            --transition-fast: all 0.2s ease; --transition-base: all 0.3s ease; --transition-slow: all 0.5s ease;
+            --bg-primary: #0a0a0c; --bg-secondary: #0f0f12; --bg-tertiary: #141418;
+            --accent-gold: #fbbf24; --accent-amber: #f59e0b; --accent-bronze: #d97706;
+            --text-primary: #fafaf9; --text-secondary: #e7e5e4; --text-muted: #a8a29e;
+            --success: #22c55e; --warning: #f59e0b; --danger: #ef4444; --info: #3b82f6;
+            --priority-critical: #ef4444; --priority-medium: #f59e0b; --priority-low: #22c55e;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
-            background-image: radial-gradient(ellipse at top, rgba(251, 191, 36, 0.03) 0%, transparent 50%), radial-gradient(ellipse at bottom right, rgba(245, 158, 11, 0.02) 0%, transparent 40%);
-        }
-
-        /* HEADER */
-        .header {
-            position: sticky; top: 0; z-index: 100;
-            background: linear-gradient(180deg, rgba(10, 10, 12, 0.98) 0%, rgba(15, 15, 18, 0.95) 100%);
-            backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(251, 191, 36, 0.1);
-            padding: var(--spacing-md) var(--spacing-xl);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-        }
-        .header-content { max-width: 1600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-lg); }
-        .logo { display: flex; align-items: center; gap: var(--spacing-sm); }
-        .logo-icon {
-            width: 42px; height: 42px;
-            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 50%, var(--accent-bronze) 100%);
-            border-radius: var(--radius-md);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.25rem;
-            box-shadow: 0 0 20px var(--accent-gold-glow);
-            position: relative; overflow: hidden;
-        }
-        .logo-icon::after {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
-            animation: shimmer 3s infinite;
-        }
-        @keyframes shimmer { 0% { transform: translateX(-100%) translateY(-100%); } 100% { transform: translateX(100%) translateY(100%); } }
-        .logo-text { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .logo-subtext { font-size: 0.6875rem; color: var(--accent-amber); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; }
-        
-        .nav-tabs { display: flex; gap: var(--spacing-xs); background: rgba(20, 20, 24, 0.6); padding: 4px; border-radius: var(--radius-lg); border: 1px solid rgba(251, 191, 36, 0.08); }
-        .nav-tab { padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--radius-md); cursor: pointer; transition: var(--transition-base); font-size: 0.8125rem; font-weight: 500; color: var(--text-muted); border: none; background: transparent; }
-        .nav-tab:hover { color: var(--text-primary); background: rgba(251, 191, 36, 0.05); }
-        .nav-tab.active { background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%); color: var(--accent-gold); box-shadow: 0 0 20px var(--accent-gold-glow), inset 0 1px 0 rgba(251, 191, 36, 0.2); border: 1px solid rgba(251, 191, 36, 0.2); }
-        
-        .main-content { max-width: 1600px; margin: 0 auto; padding: var(--spacing-xl); }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        .header { position: sticky; top: 0; z-index: 100; background: linear-gradient(180deg, rgba(10,10,12,0.98) 0%, rgba(15,15,18,0.95) 100%); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(251,191,36,0.1); padding: 1rem 1.5rem; }
+        .header-content { max-width: 1600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+        .logo { display: flex; align-items: center; gap: 0.5rem; }
+        .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--accent-gold), var(--accent-amber), var(--accent-bronze)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; background: linear-gradient(135deg, var(--text-primary), var(--accent-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-subtext { font-size: 0.6875rem; color: var(--accent-amber); text-transform: uppercase; letter-spacing: 0.15em; }
+        .nav-tabs { display: flex; gap: 4px; background: rgba(20,20,24,0.6); padding: 4px; border-radius: 16px; border: 1px solid rgba(251,191,36,0.08); overflow-x: auto; }
+        .nav-tab { padding: 0.75rem 1rem; border-radius: 12px; cursor: pointer; font-size: 0.8125rem; font-weight: 500; color: var(--text-muted); border: none; background: transparent; white-space: nowrap; }
+        .nav-tab.active { background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(245,158,11,0.1)); color: var(--accent-gold); border: 1px solid rgba(251,191,36,0.2); }
+        .main-content { max-width: 1600px; margin: 0 auto; padding: 1.5rem; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeInUp 0.5s ease-out; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* HERO - ANIME VIBES */
-        .hero-section {
-            position: relative;
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-2xl);
-            margin-bottom: var(--spacing-xl);
-            overflow: hidden;
-            border: 1px solid rgba(251, 191, 36, 0.1);
-            min-height: 280px;
-            display: flex;
-            align-items: center;
-        }
-        .hero-section::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent 0%, var(--accent-gold) 50%, transparent 100%);
-        }
-        .hero-bg {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.3;
-            filter: saturate(1.3) contrast(1.1);
-        }
-        .hero-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(10, 10, 12, 0.85) 0%, rgba(15, 15, 18, 0.7) 50%, rgba(10, 10, 12, 0.9) 100%);
-        }
-        .hero-content { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .hero-greeting { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: var(--spacing-sm); background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 50%, var(--accent-amber) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-subtitle { font-size: 1.125rem; color: var(--text-secondary); margin-bottom: var(--spacing-md); }
-        .hero-status { display: flex; gap: var(--spacing-lg); margin-top: var(--spacing-lg); }
-        .status-pill { display: flex; align-items: center; gap: var(--spacing-xs); background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.2); padding: var(--spacing-xs) var(--spacing-md); border-radius: 100px; font-size: 0.875rem; color: var(--accent-gold); }
-        .status-dot { width: 8px; height: 8px; background: var(--accent-gold); border-radius: 50%; animation: pulse 2s infinite; box-shadow: 0 0 10px var(--accent-gold-glow); }
-        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.9); } }
-        .hero-datetime { text-align: right; }
-        .hero-time { font-size: 3rem; font-weight: 200; color: var(--accent-gold); font-variant-numeric: tabular-nums; letter-spacing: -0.05em; text-shadow: 0 0 30px var(--accent-gold-glow); }
-        .hero-date { font-size: 0.9375rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
-
-        /* SECTIONS */
-        .section { background: linear-gradient(135deg, rgba(20, 20, 24, 0.9) 0%, rgba(15, 15, 18, 0.95) 100%); border: 1px solid rgba(251, 191, 36, 0.08); border-radius: var(--radius-lg); padding: var(--spacing-xl); margin-bottom: var(--spacing-xl); position: relative; overflow: hidden; }
-        .section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(251, 191, 36, 0.3) 50%, transparent 100%); }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg); padding-bottom: var(--spacing-md); border-bottom: 1px solid rgba(251, 191, 36, 0.1); }
-        .section-title { font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: var(--spacing-sm); color: var(--text-primary); }
-        .section-title-icon { width: 36px; height: 36px; background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(251, 191, 36, 0.2); }
-
-        /* BUTTONS */
-        .btn { background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%); color: var(--bg-primary); border: none; border-radius: var(--radius-md); padding: var(--spacing-sm) var(--spacing-lg); font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: var(--transition-base); box-shadow: 0 4px 20px var(--accent-gold-glow); }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--accent-gold-glow); }
-        .btn-secondary { background: transparent; color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); box-shadow: none; }
-        .btn-secondary:hover { background: rgba(251, 191, 36, 0.1); box-shadow: 0 4px 20px var(--accent-gold-glow); }
-
-        /* NEWS ITEMS - CLICKABLE */
-        .news-item { display: flex; gap: var(--spacing-md); padding: var(--spacing-md); background: linear-gradient(135deg, rgba(251, 191, 36, 0.03) 0%, rgba(245, 158, 11, 0.02) 100%); border-radius: var(--radius-md); border-left: 3px solid var(--accent-gold); margin-bottom: var(--spacing-sm); transition: var(--transition-base); border: 1px solid rgba(251, 191, 36, 0.05); border-left-width: 3px; cursor: pointer; }
-        .news-item:hover { background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(245, 158, 11, 0.06) 100%); transform: translateX(6px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 20px var(--accent-gold-glow); }
-        .news-number { font-weight: 800; color: var(--accent-gold); font-size: 1.125rem; min-width: 28px; text-align: center; text-shadow: 0 0 10px var(--accent-gold-glow); }
-        .news-content { flex: 1; }
-        .news-title { font-weight: 600; font-size: 1rem; color: var(--text-primary); margin-bottom: 4px; }
-        .news-summary { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 6px; }
-        .news-meta { display: flex; justify-content: space-between; align-items: center; }
-        .news-source { font-size: 0.75rem; color: var(--text-muted); }
-        .news-category { font-size: 0.6875rem; color: var(--accent-gold); background: rgba(251, 191, 36, 0.1); padding: 3px 10px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-
-        /* MODAL */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; padding: var(--spacing-xl); }
-        .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%); border: 1px solid rgba(251, 191, 36, 0.2); border-radius: var(--radius-xl); max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 40px var(--accent-gold-glow); }
-        .modal-header { padding: var(--spacing-xl); border-bottom: 1px solid rgba(251, 191, 36, 0.1); display: flex; justify-content: space-between; align-items: flex-start; }
-        .modal-title { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-xs); }
-        .modal-source { font-size: 0.875rem; color: var(--accent-gold); }
-        .modal-close { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; padding: var(--spacing-xs); transition: var(--transition-fast); }
-        .modal-close:hover { color: var(--accent-gold); }
-        .modal-body { padding: var(--spacing-xl); }
-        .modal-summary { font-size: 1rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: var(--spacing-lg); }
-        .modal-actions { display: flex; gap: var(--spacing-md); }
-        .modal-btn { flex: 1; padding: var(--spacing-md); border-radius: var(--radius-md); font-weight: 600; cursor: pointer; transition: var(--transition-base); text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-xs); }
-        .modal-btn-primary { background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%); color: var(--bg-primary); border: none; }
-        .modal-btn-secondary { background: transparent; color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
-
-        /* CRYPTO WATCHLIST */
-        .watchlist-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--spacing-md); }
-        .crypto-card { background: linear-gradient(135deg, rgba(20, 20, 24, 0.95) 0%, rgba(15, 15, 18, 0.98) 100%); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-lg); padding: var(--spacing-lg); text-align: center; transition: var(--transition-base); position: relative; overflow: hidden; }
-        .crypto-card:hover { transform: translateY(-4px); border-color: rgba(251, 191, 36, 0.2); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-gold-glow); }
-        .crypto-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent 0%, var(--accent-gold) 50%, transparent 100%); }
-        .crypto-icon { width: 48px; height: 48px; margin: 0 auto var(--spacing-sm); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%); border: 1px solid rgba(251, 191, 36, 0.2); }
-        .crypto-name { font-weight: 700; font-size: 1.125rem; margin-bottom: 2px; }
-        .crypto-symbol { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: var(--spacing-sm); }
-        .crypto-price { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
-        .crypto-change { font-size: 0.875rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; display: inline-block; }
-        .crypto-change.up { color: var(--success); background: var(--success-glow); }
-        .crypto-change.down { color: var(--danger); background: var(--danger-glow); }
-        .crypto-sparkline { height: 40px; margin-top: var(--spacing-sm); opacity: 0.6; }
-
-        /* QUOTE BOX */
-        .quote-box { margin-top: var(--spacing-lg); padding: var(--spacing-lg); background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(245, 158, 11, 0.05) 100%); border-left: 4px solid var(--accent-gold); border-radius: var(--radius-md); font-style: italic; color: var(--text-secondary); font-size: 1.125rem; line-height: 1.6; position: relative; }
-        .quote-box::before { content: '"'; font-size: 4rem; color: var(--accent-gold); opacity: 0.3; position: absolute; top: -10px; left: 10px; font-family: Georgia, serif; }
-        .quote-author { margin-top: var(--spacing-sm); font-size: 0.875rem; color: var(--accent-gold); font-style: normal; font-weight: 600; }
-
-        /* METRIC CARDS */
-        .cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-lg); margin-bottom: var(--spacing-xl); }
-        .metric-card { background: linear-gradient(135deg, rgba(20, 20, 24, 0.95) 0%, rgba(15, 15, 18, 0.98) 100%); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-lg); padding: var(--spacing-xl); position: relative; overflow: hidden; transition: var(--transition-base); }
-        .metric-card:hover { transform: translateY(-4px); border-color: rgba(251, 191, 36, 0.2); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--accent-gold-glow); }
-        .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent 0%, var(--accent-gold) 50%, transparent 100%); }
-        .metric-icon { width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: var(--spacing-md); background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%); border: 1px solid rgba(251, 191, 36, 0.2); box-shadow: 0 0 20px var(--accent-gold-glow); }
-        .metric-label { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: var(--spacing-xs); font-weight: 600; }
-        .metric-value { font-size: 2.25rem; font-weight: 800; margin-bottom: var(--spacing-xs); background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .metric-trend { font-size: 0.8125rem; display: flex; align-items: center; gap: 4px; }
-        .trend-up { color: var(--success); }
-
-        /* CALENDAR WIDGET - CLEAN REWRITE */
-        .calendar-section { background: linear-gradient(135deg, rgba(251, 191, 36, 0.05) 0%, rgba(20, 20, 24, 0.8) 100%); border: 1px solid rgba(251, 191, 36, 0.15); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-xl); }
-        .calendar-header-main { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md); }
+        .tab-content.active { display: block; }
+        
+        .hero-section { position: relative; background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary)); border-radius: 24px; padding: 2rem; margin-bottom: 1.5rem; border: 1px solid rgba(251,191,36,0.1); }
+        .hero-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1920&q=80'); background-size: cover; opacity: 0.3; }
+        .hero-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(10,10,12,0.7), rgba(15,15,18,0.9)); }
+        .hero-content { position: relative; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+        .hero-greeting { font-size: 2rem; font-weight: 700; }
+        .hero-time { font-size: 3rem; font-weight: 200; color: var(--accent-gold); }
+        
+        .section { background: rgba(20,20,24,0.6); border: 1px solid rgba(251,191,36,0.1); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .section-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.125rem; font-weight: 600; }
+        
+        /* CALENDAR */
+        .calendar-section { background: linear-gradient(135deg, rgba(251,191,36,0.05), rgba(20,20,24,0.8)); border: 1px solid rgba(251,191,36,0.15); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .calendar-title { font-size: 1.125rem; font-weight: 600; color: var(--accent-gold); }
-        .calendar-nav { display: flex; gap: var(--spacing-sm); }
-        .calendar-nav-btn { background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.2); color: var(--accent-gold); padding: var(--spacing-xs) var(--spacing-sm); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.875rem; }
-        .calendar-nav-btn:hover { background: rgba(251, 191, 36, 0.2); }
-        .calendar-grid-main { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-        .calendar-day-header { font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: var(--spacing-xs); font-weight: 500; }
-        .calendar-day-cell { 
-            aspect-ratio: 1; 
-            background: rgba(20, 20, 24, 0.6); 
-            border: 1px solid rgba(251, 191, 36, 0.05); 
-            border-radius: var(--radius-sm); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            transition: var(--transition-fast);
-            min-height: 60px;
-        }
-        .calendar-day-cell:hover { background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.3); }
-        .calendar-day-cell.today { background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(245, 158, 11, 0.2) 100%); border-color: var(--accent-gold); }
-        .calendar-day-cell.has-note { border-color: var(--accent-gold); }
-        .calendar-day-number { font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); }
-        .calendar-day-cell.today .calendar-day-number { color: var(--accent-gold); }
-        .calendar-note-indicator { font-size: 0.625rem; color: var(--accent-gold); margin-top: 2px; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
-
-        /* TASKS - FIXED 5 LINES */
-        .tasks-container { background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md); }
-        .task-line { display: flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-sm); border-bottom: 1px solid rgba(251, 191, 36, 0.05); min-height: 44px; }
-        .task-line:last-child { border-bottom: none; }
-        .task-line.empty { opacity: 0.5; }
-        .task-checkbox { width: 20px; height: 20px; border: 2px solid rgba(251, 191, 36, 0.3); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--transition-fast); }
-        .task-checkbox:hover { border-color: var(--accent-gold); }
-        .task-checkbox.checked { background: var(--accent-gold); border-color: var(--accent-gold); color: var(--bg-primary); font-size: 0.75rem; }
-        .task-input { flex: 1; background: transparent; border: none; color: var(--text-primary); font-size: 0.9375rem; outline: none; }
-        .task-input::placeholder { color: var(--text-muted); }
-        .task-delete { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem; opacity: 0; transition: var(--transition-fast); }
-        .task-line:hover .task-delete { opacity: 1; }
-        .task-delete:hover { color: var(--danger); }
-        .add-task-btn { width: 100%; padding: var(--spacing-sm); background: rgba(251, 191, 36, 0.05); border: 1px dashed rgba(251, 191, 36, 0.3); border-radius: var(--radius-md); color: var(--accent-gold); cursor: pointer; font-size: 0.9375rem; margin-top: var(--spacing-sm); transition: var(--transition-fast); }
-        .add-task-btn:hover { background: rgba(251, 191, 36, 0.1); }
-        .api-info { background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.05) 100%); border: 1px solid rgba(59, 130, 246, 0.15); border-radius: var(--radius-md); padding: var(--spacing-md); margin-top: var(--spacing-md); }
-        .api-info-title { font-size: 0.875rem; font-weight: 600; color: var(--info); margin-bottom: var(--spacing-xs); }
-        .api-info-text { font-size: 0.8125rem; color: var(--text-muted); line-height: 1.5; }
-
-        /* TODO LIST */
-        .todo-item { display: flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(251, 191, 36, 0.03); border-radius: var(--radius-md); margin-bottom: var(--spacing-sm); border: 1px solid rgba(251, 191, 36, 0.05); transition: var(--transition-base); }
-        .todo-item:hover { background: rgba(251, 191, 36, 0.06); }
-        .todo-item.completed { opacity: 0.5; }
-        .todo-item.completed .todo-text { text-decoration: line-through; color: var(--text-muted); }
-        .todo-checkbox { width: 20px; height: 20px; border: 2px solid rgba(251, 191, 36, 0.3); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast); flex-shrink: 0; }
-        .todo-checkbox:hover { border-color: var(--accent-gold); }
-        .todo-checkbox.checked { background: var(--accent-gold); border-color: var(--accent-gold); }
-        .todo-text { flex: 1; font-size: 0.9375rem; }
-        .todo-delete { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem; padding: 0 var(--spacing-xs); transition: var(--transition-fast); }
-        .todo-delete:hover { color: var(--danger); }
-        .todo-empty { text-align: center; color: var(--text-muted); padding: var(--spacing-lg); font-style: italic; }
-
-        /* COMPACT WATCHLIST */
-        .watchlist-compact { background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); overflow: hidden; }
-        .watchlist-row { display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-sm) var(--spacing-md); border-bottom: 1px solid rgba(251, 191, 36, 0.05); transition: var(--transition-fast); }
+        .calendar-nav { display: flex; gap: 0.5rem; }
+        .calendar-nav button { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); color: var(--accent-gold); padding: 0.25rem 0.75rem; border-radius: 6px; cursor: pointer; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+        .calendar-day-header { font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 0.25rem; }
+        .calendar-day { aspect-ratio: 1; background: rgba(20,20,24,0.6); border: 1px solid rgba(251,191,36,0.05); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; min-height: 60px; }
+        .calendar-day:hover { background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.3); }
+        .calendar-day.today { background: linear-gradient(135deg, rgba(251,191,36,0.3), rgba(245,158,11,0.2)); border-color: var(--accent-gold); }
+        .calendar-day-num { font-weight: 600; }
+        .calendar-day-note { font-size: 0.625rem; color: var(--accent-gold); max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
+        /* WATCHLIST */
+        .watchlist { background: rgba(20,20,24,0.6); border: 1px solid rgba(251,191,36,0.1); border-radius: 12px; overflow: hidden; }
+        .watchlist-row { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(251,191,36,0.05); }
         .watchlist-row:last-child { border-bottom: none; }
-        .watchlist-row:hover { background: rgba(251, 191, 36, 0.03); }
-        .watchlist-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 1rem; background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%); border-radius: var(--radius-sm); }
-        .watchlist-name { flex: 1; font-weight: 500; font-size: 0.9375rem; }
+        .watchlist-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: rgba(251,191,36,0.1); border-radius: 6px; }
+        .watchlist-name { flex: 1; font-weight: 500; }
         .watchlist-symbol { color: var(--text-muted); font-size: 0.8125rem; min-width: 50px; }
-        .watchlist-price { font-family: 'Inter', monospace; font-weight: 600; font-size: 0.9375rem; min-width: 100px; text-align: right; }
+        .watchlist-price { font-weight: 600; min-width: 100px; text-align: right; }
         .watchlist-change { font-size: 0.8125rem; font-weight: 500; min-width: 60px; text-align: right; }
         .watchlist-change.up { color: var(--success); }
         .watchlist-change.down { color: var(--danger); }
-
-        /* CALENDAR NOTES */
-        .calendar-date { font-size: 0.75rem; color: var(--text-secondary); padding: 4px 2px; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition-fast); min-height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-        .calendar-date:hover { background: rgba(251, 191, 36, 0.1); color: var(--accent-gold); }
-        .calendar-date.today { background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%); color: var(--bg-primary); font-weight: 700; }
-        .calendar-date.has-note { border: 1px solid rgba(251, 191, 36, 0.3); }
-        .calendar-day-number { font-weight: 500; margin-bottom: 2px; }
-        .calendar-note-preview { font-size: 0.625rem; color: var(--accent-gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; line-height: 1.2; }
         
-        .date-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; }
-        .date-modal-overlay.active { display: flex; }
-        .date-modal { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%); border: 1px solid rgba(251, 191, 36, 0.2); border-radius: var(--radius-lg); width: 90%; max-width: 400px; max-height: 80vh; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
-        .date-modal-header { padding: var(--spacing-md) var(--spacing-lg); border-bottom: 1px solid rgba(251, 191, 36, 0.1); display: flex; justify-content: space-between; align-items: center; }
-        .date-modal-title { font-size: 1.125rem; font-weight: 600; color: var(--accent-gold); }
-        .date-modal-close { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; transition: var(--transition-fast); }
-        .date-modal-close:hover { color: var(--accent-gold); }
-        .date-modal-body { padding: var(--spacing-md); }
-        .date-note-input { width: 100%; background: rgba(251, 191, 36, 0.05); border: 1px solid rgba(251, 191, 36, 0.2); border-radius: var(--radius-md); padding: var(--spacing-sm); color: var(--text-primary); font-family: inherit; margin-bottom: var(--spacing-sm); resize: vertical; min-height: 60px; }
-        .date-note-item { display: flex; align-items: flex-start; gap: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(251, 191, 36, 0.05); border-radius: var(--radius-sm); margin-bottom: var(--spacing-sm); }
-        .date-note-text { flex: 1; font-size: 0.875rem; word-break: break-word; }
-        .date-note-delete { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; padding: 0; transition: var(--transition-fast); }
-        .date-note-delete:hover { color: var(--danger); }
-        .date-notes-list { max-height: 200px; overflow-y: auto; margin-bottom: var(--spacing-sm); }
-
-        .loading { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(251, 191, 36, 0.2); border-top-color: var(--accent-gold); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        @media (max-width: 1200px) { .cards-grid, .watchlist-grid { grid-template-columns: repeat(2, 1fr); } }
+        /* TASKS - NEW DESIGN */
+        .task-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .task-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1rem; background: rgba(251,191,36,0.03); border: 1px solid rgba(251,191,36,0.08); border-radius: 12px; transition: all 0.2s ease; }
+        .task-item:hover { background: rgba(251,191,36,0.06); border-color: rgba(251,191,36,0.15); }
+        .task-item.completed { opacity: 0.5; }
+        .task-item.completed .task-text { text-decoration: line-through; color: var(--text-muted); }
+        .task-checkbox { width: 22px; height: 22px; border: 2px solid rgba(251,191,36,0.3); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.75rem; }
+        .task-checkbox.checked { background: var(--accent-gold); border-color: var(--accent-gold); color: var(--bg-primary); }
+        .task-content { flex: 1; min-width: 0; }
+        .task-text { font-size: 0.9375rem; word-break: break-word; }
+        .task-input { width: 100%; background: transparent; border: none; color: var(--text-primary); font-size: 0.9375rem; outline: none; }
+        .task-input::placeholder { color: var(--text-muted); }
+        .task-priority { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; cursor: pointer; }
+        .task-priority.critical { background: rgba(239,68,68,0.2); color: var(--priority-critical); border: 1px solid rgba(239,68,68,0.3); }
+        .task-priority.medium { background: rgba(245,158,11,0.2); color: var(--priority-medium); border: 1px solid rgba(245,158,11,0.3); }
+        .task-priority.low { background: rgba(34,197,94,0.2); color: var(--priority-low); border: 1px solid rgba(34,197,94,0.3); }
+        .task-delete { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem; opacity: 0; transition: opacity 0.2s; }
+        .task-item:hover .task-delete { opacity: 1; }
+        .task-delete:hover { color: var(--danger); }
+        
+        .task-add-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1rem; background: rgba(251,191,36,0.05); border: 2px dashed rgba(251,191,36,0.2); border-radius: 12px; margin-top: 0.5rem; }
+        .task-add-icon { color: var(--accent-gold); font-size: 1.25rem; }
+        .task-add-input { flex: 1; background: transparent; border: none; color: var(--text-primary); font-size: 0.9375rem; outline: none; }
+        .task-add-input::placeholder { color: var(--text-muted); }
+        .task-add-priority { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.6875rem; font-weight: 600; cursor: pointer; background: rgba(251,191,36,0.1); color: var(--accent-gold); border: 1px solid rgba(251,191,36,0.2); }
+        
+        .show-more-btn { width: 100%; padding: 0.75rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.1); border-radius: 8px; color: var(--accent-gold); cursor: pointer; font-size: 0.875rem; margin-top: 0.5rem; }
+        .show-more-btn:hover { background: rgba(251,191,36,0.1); }
+        
+        /* NEWS */
+        .news-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(251,191,36,0.03); border-radius: 12px; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s; }
+        .news-item:hover { background: rgba(251,191,36,0.06); }
+        .news-num { width: 28px; height: 28px; background: rgba(251,191,36,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 600; flex-shrink: 0; }
+        .news-content { flex: 1; }
+        .news-title { font-weight: 500; margin-bottom: 0.25rem; }
+        .news-preview { font-size: 0.8125rem; color: var(--text-muted); }
+        .news-meta { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+        .news-source { font-size: 0.75rem; color: var(--accent-gold); }
+        .news-cat { font-size: 0.75rem; color: var(--text-muted); background: rgba(251,191,36,0.1); padding: 0.125rem 0.5rem; border-radius: 4px; }
+        
+        /* QUOTE */
+        .quote-box { background: linear-gradient(135deg, rgba(251,191,36,0.05), rgba(245,158,11,0.03)); border-left: 3px solid var(--accent-gold); padding: 1.25rem; border-radius: 0 12px 12px 0; margin-top: 1rem; font-style: italic; }
+        .quote-author { margin-top: 0.75rem; font-size: 0.875rem; color: var(--accent-amber); font-style: normal; }
+        
+        /* BUTTONS */
+        .btn { background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(245,158,11,0.1)); border: 1px solid rgba(251,191,36,0.2); color: var(--accent-gold); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.875rem; }
+        .btn:hover { background: rgba(251,191,36,0.2); }
+        
         @media (max-width: 768px) {
-            .hero-content { flex-direction: column; align-items: flex-start; gap: var(--spacing-lg); }
-            .hero-time { font-size: 2rem; } .hero-greeting { font-size: 1.75rem; }
-            .cards-grid, .watchlist-grid { grid-template-columns: 1fr; }
-            .nav-tabs { overflow-x: auto; flex-wrap: nowrap; }
+            .hero-greeting { font-size: 1.5rem; }
+            .hero-time { font-size: 2rem; }
+            .nav-tabs { flex-wrap: nowrap; overflow-x: auto; }
+            .section-header { flex-wrap: wrap; gap: 0.5rem; }
         }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
-        ::-webkit-scrollbar-thumb { background: rgba(251, 191, 36, 0.2); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(251, 191, 36, 0.4); }
     </style>
 </head>
 <body>
@@ -330,194 +143,110 @@
         </div>
     </header>
 
-    <!-- MODAL -->
-    <div class="modal-overlay" id="newsModal" onclick="closeModal(event)">
-        <div class="modal" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <div>
-                    <div class="modal-title" id="modalTitle">Article Title</div>
-                    <div class="modal-source" id="modalSource">Source Name</div>
-                </div>
-                <button class="modal-close" onclick="closeModal()">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-summary" id="modalSummary">Article summary goes here...</div>
-                <div class="modal-actions">
-                    <a id="modalLink" href="#" target="_blank" class="modal-btn modal-btn-primary">🚀 Read Full Article</a>
-                    <button class="modal-btn modal-btn-secondary" onclick="closeModal()">✕ Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DATE NOTES MODAL -->
-    <div class="date-modal-overlay" id="dateModal" onclick="closeDateModal(event)">
-        <div class="date-modal">
-            <div class="date-modal-header">
-                <span class="date-modal-title" id="dateModalTitle">February 21, 2026</span>
-                <button class="date-modal-close" onclick="closeDateModal()">×</button>
-            </div>
-            <div class="date-modal-body">
-                <div class="date-notes-list" id="dateNotesList">
-                    <!-- Notes generated by JS -->
-                </div>
-                <textarea class="date-note-input" id="dateNoteInput" placeholder="Add a note for this date..."></textarea>
-                <button class="btn" onclick="addDateNote()" style="width: 100%;">+ Add Note</button>
-            </div>
-        </div>
-    </div>
-
     <main class="main-content">
         <!-- DASHBOARD TAB -->
         <div class="tab-content active" id="dashboard">
-            <!-- HERO SECTION - ANIME VIBES -->
             <div class="hero-section">
                 <div class="hero-bg"></div>
                 <div class="hero-overlay"></div>
                 <div class="hero-content">
-                    <div style="flex: 1;">
-                        <h1 class="hero-greeting" id="greeting">Good afternoon, Dibs</h1>
-                        <p class="hero-subtitle" id="subtitle">Time to conquer today</p>
-                        <div class="hero-status">
-                            <div class="status-pill">
-                                <span class="status-dot"></span>
-                                <span>System Online</span>
-                            </div>
-                        </div>
+                    <div>
+                        <h1 class="hero-greeting" id="greeting">Loading...</h1>
+                        <p id="subtitle">Loading...</p>
                     </div>
-                    <div class="hero-datetime">
-                        <div class="hero-time" id="clock">12:46</div>
-                        <div class="hero-date" id="date">Saturday, February 21</div>
-                    </div>
+                    <div class="hero-time" id="clock">--:--</div>
                 </div>
             </div>
 
-            <!-- CALENDAR SECTION -->
+            <!-- CALENDAR -->
             <div class="calendar-section">
-                <div class="calendar-header-main">
-                    <span class="calendar-title" id="calendarMonth">February 2026</span>
+                <div class="calendar-header">
+                    <span class="calendar-title" id="calendarMonth">Loading...</span>
                     <div class="calendar-nav">
-                        <button class="calendar-nav-btn" onclick="changeMonth(-1)">←</button>
-                        <button class="calendar-nav-btn" onclick="resetToToday()">Today</button>
-                        <button class="calendar-nav-btn" onclick="changeMonth(1)">→</button>
+                        <button onclick="changeMonth(-1)">←</button>
+                        <button onclick="resetToToday()">Today</button>
+                        <button onclick="changeMonth(1)">→</button>
                     </div>
                 </div>
-                <div class="calendar-grid-main" id="calendarGrid">
-                    <!-- Generated by JS -->
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar generated by JS -->
                 </div>
             </div>
 
-            <!-- CRYPTO WATCHLIST - COMPACT LIST -->
+            <!-- WATCHLIST -->
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">
-                        <span class="section-title-icon">📈</span>
-                        Watchlist
-                    </h2>
-                    <button class="btn btn-secondary" onclick="fetchCryptoPrices()">↻ Refresh</button>
+                    <h2 class="section-title">📈 Watchlist</h2>
+                    <button class="btn" onclick="fetchCryptoPrices()">↻ Refresh</button>
                 </div>
-                <div class="watchlist-compact">
+                <div class="watchlist" id="watchlist">
                     <div class="watchlist-row">
                         <span class="watchlist-icon">₿</span>
                         <span class="watchlist-name">Bitcoin</span>
                         <span class="watchlist-symbol">BTC</span>
-                        <span class="watchlist-price" id="btc-price"><span class="loading"></span></span>
+                        <span class="watchlist-price" id="btc-price">--</span>
                         <span class="watchlist-change" id="btc-change">--</span>
                     </div>
                     <div class="watchlist-row">
                         <span class="watchlist-icon">Ξ</span>
                         <span class="watchlist-name">Ethereum</span>
                         <span class="watchlist-symbol">ETH</span>
-                        <span class="watchlist-price" id="eth-price"><span class="loading"></span></span>
+                        <span class="watchlist-price" id="eth-price">--</span>
                         <span class="watchlist-change" id="eth-change">--</span>
                     </div>
                     <div class="watchlist-row">
                         <span class="watchlist-icon">◎</span>
                         <span class="watchlist-name">Solana</span>
                         <span class="watchlist-symbol">SOL</span>
-                        <span class="watchlist-price" id="sol-price"><span class="loading"></span></span>
+                        <span class="watchlist-price" id="sol-price">--</span>
                         <span class="watchlist-change" id="sol-change">--</span>
                     </div>
                     <div class="watchlist-row">
                         <span class="watchlist-icon">₳</span>
                         <span class="watchlist-name">Cardano</span>
                         <span class="watchlist-symbol">ADA</span>
-                        <span class="watchlist-price" id="ada-price"><span class="loading"></span></span>
+                        <span class="watchlist-price" id="ada-price">--</span>
                         <span class="watchlist-change" id="ada-change">--</span>
                     </div>
                     <div class="watchlist-row">
                         <span class="watchlist-icon">◈</span>
                         <span class="watchlist-name">Avalanche</span>
                         <span class="watchlist-symbol">AVAX</span>
-                        <span class="watchlist-price" id="avax-price"><span class="loading"></span></span>
+                        <span class="watchlist-price" id="avax-price">--</span>
                         <span class="watchlist-change" id="avax-change">--</span>
                     </div>
                 </div>
-                <div style="margin-top: var(--spacing-sm); padding: var(--spacing-sm); background: rgba(251, 191, 36, 0.05); border-radius: var(--radius-md); font-size: 0.8125rem; color: var(--text-muted);">
-                    📊 Crypto now • Stocks coming soon
-                </div>
             </div>
 
-            <!-- TODO LIST -->
+            <!-- TASKS -->
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">
-                        <span class="section-title-icon">✓</span>
-                        Tasks
-                    </h2>
-                    <div style="display: flex; gap: var(--spacing-sm);">
-                        <button class="btn btn-secondary" onclick="showCompletedHistory()">📊 History</button>
-                        <button class="btn btn-secondary" onclick="clearCompletedTodos()">Clear Done</button>
-                    </div>
+                    <h2 class="section-title">✓ Tasks</h2>
+                    <button class="btn" onclick="clearCompleted()">Clear Done</button>
                 </div>
-                <div class="tasks-container" id="tasksContainer">
+                <div class="task-list" id="taskList">
                     <!-- Tasks rendered by JS -->
                 </div>
+                <button class="show-more-btn" id="showMoreBtn" onclick="toggleShowMore()" style="display:none;">Show More Tasks</button>
+                <div class="task-add-row">
+                    <span class="task-add-icon">+</span>
+                    <input type="text" class="task-add-input" id="newTaskInput" placeholder="Add a new task..." onkeypress="if(event.key==='Enter')addTask()">
+                    <span class="task-add-priority" id="newTaskPriority" onclick="cyclePriority()">MEDIUM</span>
+                </div>
             </div>
 
-            <!-- NEWS BRIEFING -->
+            <!-- NEWS -->
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">
-                        <span class="section-title-icon">📰</span>
-                        <span id="briefingTitle">Afternoon Check-in</span>
-                    </h2>
-                    <button class="btn btn-secondary" onclick="loadBriefing()">↻ Refresh</button>
+                    <h2 class="section-title">📰 Briefing</h2>
+                    <button class="btn" onclick="loadBriefing()">↻ Refresh</button>
                 </div>
                 <div id="newsList">
-                    <!-- News items generated by JS -->
+                    <!-- News rendered by JS -->
                 </div>
                 <div class="quote-box" id="quoteBox">
-                    <!-- Quote generated by JS -->
+                    Loading quote...
                 </div>
-            </div>
-        </div>
-
-        <!-- OTHER TABS -->
-        <div class="tab-content" id="projects">
-            <div class="section">
-                <h2 class="section-title"><span class="section-title-icon">📋</span>Project Board</h2>
-                <p style="color: var(--text-muted);">Project board coming soon...</p>
-            </div>
-        </div>
-
-        <div class="tab-content" id="revenue">
-            <div class="section">
-                <h2 class="section-title"><span class="section-title-icon">💰</span>Revenue Tracker</h2>
-                <div class="cards-grid">
-                    <div class="metric-card"><div class="metric-icon">💵</div><div class="metric-label">Monthly Budget</div><div class="metric-value">$100</div></div>
-                    <div class="metric-card"><div class="metric-icon">☁️</div><div class="metric-label">Kimi 2.5</div><div class="metric-value">$60</div></div>
-                    <div class="metric-card"><div class="metric-icon">💻</div><div class="metric-label">Local Models</div><div class="metric-value">$2</div></div>
-                    <div class="metric-card"><div class="metric-icon">💰</div><div class="metric-label">Buffer</div><div class="metric-value">$38</div></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="notes">
-            <div class="section">
-                <h2 class="section-title"><span class="section-title-icon">📝</span>Notes</h2>
-                <textarea style="width: 100%; height: 400px; background: rgba(251, 191, 36, 0.03); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md); color: var(--text-primary); font-family: inherit; font-size: 0.9375rem; resize: vertical;"
-                    placeholder="Start writing your thoughts..."></textarea>
             </div>
         </div>
 
@@ -525,609 +254,162 @@
         <div class="tab-content" id="ai-costs">
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">
-                        <span class="section-title-icon">🤖</span>
-                        AI Infrastructure Costs
-                    </h2>
-                    <button class="btn btn-secondary" onclick="refreshAICosts()">↻ Refresh</button>
+                    <h2 class="section-title">🤖 AI Costs</h2>
                 </div>
-                
-                <!-- Total Summary -->
-                <div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(245, 158, 11, 0.05) 100%); border: 1px solid rgba(251, 191, 36, 0.15); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md);">
-                        <div>
-                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: var(--spacing-xs);">This Session</div>
-                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-gold);" id="totalSessionCost">$0.42</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: var(--spacing-xs);">Total Tokens</div>
-                            <div style="font-size: 1.5rem; font-weight: 600;" id="totalTokens">284K</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: var(--spacing-xs);">Models Used</div>
-                            <div style="font-size: 1.5rem; font-weight: 600;" id="modelsUsedCount">3</div>
-                        </div>
-                    </div>
-                </div>
+                <p>AI infrastructure costs tracking coming soon...</p>
+            </div>
+        </div>
 
-                <!-- LLM Breakdown -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-md);">
-                    <!-- Kimi K2.5 -->
-                    <div style="background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-sm);">
-                            <div style="font-weight: 600; color: var(--accent-gold);">🧠 Kimi K2.5</div>
-                            <div style="font-size: 0.875rem; color: var(--success);">Primary</div>
-                        </div>
-                        <div style="margin-bottom: var(--spacing-sm);">
-                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Tokens Used</div>
-                            <div style="font-size: 1.25rem; font-weight: 600;">~280K</div>
-                        </div>
-                        <div style="margin-bottom: var(--spacing-sm);">
-                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Est. Cost</div>
-                            <div style="font-size: 1.25rem; font-weight: 600;">~$0.40</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Workload</div>
-                            <div style="height: 8px; background: rgba(251, 191, 36, 0.1); border-radius: 4px; margin-top: var(--spacing-xs); overflow: hidden;">
-                                <div style="width: 95%; height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px;"></div>
-                            </div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">95% of total workload</div>
-                        </div>
-                    </div>
-
-                    <!-- Groq Whisper -->
-                    <div style="background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-sm);">
-                            <div style="font-weight: 600; color: var(--info);">🎙️ Groq Whisper</div>
-                            <div style="font-size: 0.875rem; color: var(--info);">Transcription</div>
-                        </div>
-                        <div style="margin-bottom: var(--spacing-sm);">
-                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Audio Processed</div>
-                            <div style="font-size: 1.25rem; font-weight: 600;">~5 min</div>
-                        </div>
-                        <div style="margin-bottom: var(--spacing-sm);">
-                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Est. Cost</div>
-                            <div style="font-size: 1.25rem; font-weight: 600;">~$0.02</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Workload</div>
-                            <div style="height: 8px; background: rgba(251, 191, 36, 0.1); border-radius: 4px; margin-top: var(--spacing-xs); overflow: hidden;">
-                                <div style="width: 5%; height: 100%; background: linear-gradient(90deg, var(--info), #60a5fa); border-radius: 4px;"></div>
-                            </div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">5% of total workload</div>
-                        </div>
-                    </div>
-
-                    <!-- Local LLM -->
-                    <div style="background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-sm);">
-                            <div style="font-weight: 600; color: var(--success);">💻 Local LLM</div>
-                            <div style="font-size: 0.875rem; color: var(--text-muted);">On-device</div>
-                        </div>
-                        <div style="margin-bottom: var(--spacing-sm);">
-                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Status</div>
-                            <div style="font-size: 1.25rem; font-weight: 600; color: var(--success);">⚡ Active</div>
-                        </div>
-                        <div style="margin-bottom: var(--spacing-sm);">
-                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Cost</div>
-                            <div style="font-size: 1.25rem; font-weight: 600; color: var(--success);">$0.00</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.8125rem; color: var(--text-muted);">Workload</div>
-                            <div style="height: 8px; background: rgba(251, 191, 36, 0.1); border-radius: 4px; margin-top: var(--spacing-xs); overflow: hidden;">
-                                <div style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--success), #4ade80); border-radius: 4px;"></div>
-                            </div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Reserved for offline use</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cost History Chart Placeholder -->
-                <div style="background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md); margin-top: var(--spacing-lg);">
-                    <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--spacing-md);">📈 Cost History</h3>
-                    <div style="height: 200px; display: flex; align-items: flex-end; justify-content: space-around; gap: var(--spacing-sm); padding: var(--spacing-md); background: rgba(10, 10, 12, 0.5); border-radius: var(--radius-md);">
-                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
-                            <div style="width: 100%; height: 30%; background: linear-gradient(180deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px 4px 0 0;"></div>
-                            <span style="font-size: 0.75rem; color: var(--text-muted);">Feb 17</span>
-                        </div>
-                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
-                            <div style="width: 100%; height: 45%; background: linear-gradient(180deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px 4px 0 0;"></div>
-                            <span style="font-size: 0.75rem; color: var(--text-muted);">Feb 18</span>
-                        </div>
-                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
-                            <div style="width: 100%; height: 25%; background: linear-gradient(180deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px 4px 0 0;"></div>
-                            <span style="font-size: 0.75rem; color: var(--text-muted);">Feb 19</span>
-                        </div>
-                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
-                            <div style="width: 100%; height: 60%; background: linear-gradient(180deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px 4px 0 0;"></div>
-                            <span style="font-size: 0.75rem; color: var(--text-muted);">Feb 20</span>
-                        </div>
-                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
-                            <div style="width: 100%; height: 80%; background: linear-gradient(180deg, var(--accent-gold), var(--accent-amber)); border-radius: 4px 4px 0 0;"></div>
-                            <span style="font-size: 0.75rem; color: var(--text-muted);">Today</span>
-                        </div>
-                    </div>
-                    <div style="text-align: center; margin-top: var(--spacing-sm); font-size: 0.8125rem; color: var(--text-muted);">
-                        Mission Control build sessions (approximate costs)
-                    </div>
-                </div>
-
-                <!-- Connected Models List -->
-                <div style="background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md); margin-top: var(--spacing-lg);">
-                    <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--spacing-md);">🔗 Connected AI Models</h3>
-                    <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm); background: rgba(251, 191, 36, 0.05); border-radius: var(--radius-sm);">
-                            <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                                <span style="font-size: 1.25rem;">🧠</span>
-                                <div>
-                                    <div style="font-weight: 500;">Kimi K2.5</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">kimi-coding/k2p5 | 262K context</div>
-                                </div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="color: var(--success); font-weight: 500;">🟢 Active</div>
-                                <div style="font-size: 0.75rem; color: var(--text-muted);">Primary</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm); background: rgba(59, 130, 246, 0.05); border-radius: var(--radius-sm);">
-                            <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                                <span style="font-size: 1.25rem;">🎙️</span>
-                                <div>
-                                    <div style="font-weight: 500;">Groq Whisper</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">whisper-large-v3-turbo</div>
-                                </div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="color: var(--success); font-weight: 500;">🟢 Active</div>
-                                <div style="font-size: 0.75rem; color: var(--text-muted);">Voice transcription</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-sm); background: rgba(34, 197, 94, 0.05); border-radius: var(--radius-sm);">
-                            <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
-                                <span style="font-size: 1.25rem;">💻</span>
-                                <div>
-                                    <div style="font-weight: 500;">Local LLM</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Ollama / LM Studio</div>
-                                </div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="color: var(--warning); font-weight: 500;">🟡 Standby</div>
-                                <div style="font-size: 0.75rem; color: var(--text-muted);">On-device inference</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- NOTES TAB -->
+        <div class="tab-content" id="notes">
+            <div class="section">
+                <h2 class="section-title">📝 Notes</h2>
+                <textarea style="width:100%;height:400px;background:rgba(251,191,36,0.03);border:1px solid rgba(251,191,36,0.1);border-radius:12px;padding:1rem;color:var(--text-primary);font-family:inherit;resize:vertical;" placeholder="Start writing..."></textarea>
             </div>
         </div>
     </main>
 
-    <script>
-        // DATA
-        const briefingData = {
-            morning: {
-                greeting: "Good morning, Dibs! ☀️",
-                subtitle: "The early bird catches the alpha",
-                title: "Morning Briefing",
-                quote: { text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb" },
-                news: [
-                    { id: 1, title: "Bitcoin breaks $42K resistance", source: "CoinDesk", category: "Trading", summary: "BTC shows strong momentum after weeks of consolidation. On-chain metrics suggest accumulation by institutional investors continues.", url: "https://www.coindesk.com" },
-                    { id: 2, title: "OpenClaw releases agent framework", source: "TechCrunch", category: "AI", summary: "Major update enables 100 parallel agents for complex research tasks. Enterprise adoption accelerating.", url: "https://techcrunch.com" },
-                    { id: 3, title: "Crypto market cap hits $1.6T", source: "Reuters", category: "Market", summary: "Overall market showing bullish sentiment as traditional finance eyes crypto ETF approvals.", url: "https://www.reuters.com" },
-                    { id: 4, title: "Remote work trends 2026", source: "Forbes", category: "Business", summary: "Trading from anywhere becoming standard. Tax implications for digital nomads explored.", url: "https://www.forbes.com" },
-                    { id: 5, title: "10 habits of successful traders", source: "Bloomberg", category: "Development", summary: "Discipline, journaling, and risk management top the list. Psychology beats strategy.", url: "https://www.bloomberg.com" }
-                ]
-            },
-            afternoon: {
-                greeting: "Good afternoon, Dibs! ☀️",
-                subtitle: "Mid-day momentum check",
-                title: "Afternoon Check-in",
-                quote: { text: "Success is the sum of small efforts, repeated day in and day out.", author: "Robert Collier" },
-                news: [
-                    { id: 1, title: "ETH staking rewards increase", source: "CoinTelegraph", category: "Trading", summary: "Annual yield now at 4.2% as validator participation grows. Institutional staking services expanding.", url: "https://cointelegraph.com" },
-                    { id: 2, title: "AI coding assistants comparison", source: "The Verge", category: "AI", summary: "Kimi leads in complex reasoning tasks while maintaining cost efficiency for developers.", url: "https://www.theverge.com" },
-                    { id: 3, title: "Side hustle income tax guide", source: "WSJ", category: "Business", summary: "2026 tax updates for freelancers and independent traders. New deductions available.", url: "https://www.wsj.com" },
-                    { id: 4, title: "Solana ecosystem growth", source: "Decrypt", category: "Market", summary: "DeFi TVL up 15% this month. NFT marketplace activity resurging.", url: "https://decrypt.co" },
-                    { id: 5, title: "Time management for traders", source: "Inc", category: "Development", summary: "Focus blocks vs Pomodoro: Which works better for deep analysis work?", url: "https://www.inc.com" }
-                ]
-            },
-            evening: {
-                greeting: "Good evening, Dibs! 🌙",
-                subtitle: "Reflect, review, prepare",
-                title: "Evening Review",
-                quote: { text: "Rest when you're weary. Refresh and renew yourself, your body, your mind, your spirit.", author: "Dalai Lama" },
-                news: [
-                    { id: 1, title: "Daily crypto market wrap", source: "CoinDesk", category: "Trading", 
-                      bullets: ["BTC +2.3%, ETH +1.8%, SOL +5.2%", "Volume above 30-day average", "Futures open interest climbing", "Institutional flows positive", "Next week: FOMC decision"], 
-                      url: "https://www.coindesk.com" },
-                    { id: 2, title: "OpenAI announces new model", source: "TechCrunch", category: "AI", 
-                      bullets: ["Multimodal capabilities expanded", "Competition heating up in AI space", "Pricing remains competitive", "Enterprise demand surging", "API rate limits increased"], 
-                      url: "https://techcrunch.com" },
-                    { id: 3, title: "Freelance economy report 2026", source: "Forbes", category: "Business", 
-                      bullets: ["Independent work up 23% YoY", "Trading as primary income growing", "Tax optimization strategies evolving", "Best jurisdictions ranked", "Digital nomad visas expanding"], 
-                      url: "https://www.forbes.com" },
-                    { id: 4, title: "Global markets close mixed", source: "Reuters", category: "Market", 
-                      bullets: ["Asia markets up 1-2%", "Europe flat on energy concerns", "US futures point higher", "Crypto showing relative strength", "Dollar index slightly lower"], 
-                      url: "https://www.reuters.com" },
-                    { id: 5, title: "Sleep and performance link", source: "Harvard Health", category: "Development", 
-                      bullets: ["Quality rest improves decisions by 40%", "Recovery is part of strategy", "Best sleep schedule for traders", "Naps and cognitive function", "Screen time before bed impact"], 
-                      url: "https://www.health.harvard.edu" }
-                ]
-            }
-        };
+    <!-- DATE MODAL -->
+    <div id="dateModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:200;align-items:center;justify-content:center;" onclick="if(event.target===this)closeDateModal()">
+        <div style="background:linear-gradient(135deg,var(--bg-secondary),var(--bg-tertiary));border:1px solid rgba(251,191,36,0.2);border-radius:16px;width:90%;max-width:400px;max-height:80vh;overflow:hidden;">
+            <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(251,191,36,0.1);display:flex;justify-content:space-between;align-items:center;">
+                <span id="dateModalTitle" style="font-size:1.125rem;font-weight:600;color:var(--accent-gold);">Date</span>
+                <button onclick="closeDateModal()" style="background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer;">×</button>
+            </div>
+            <div style="padding:1rem;">
+                <div id="dateNotesList" style="max-height:200px;overflow-y:auto;margin-bottom:1rem;"></div>
+                <textarea id="dateNoteInput" style="width:100%;background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:0.5rem;color:var(--text-primary);min-height:60px;resize:vertical;" placeholder="Add a note..."></textarea>
+                <button onclick="addDateNote()" style="width:100%;padding:0.75rem;background:linear-gradient(135deg,rgba(251,191,36,0.15),rgba(245,158,11,0.1));border:1px solid rgba(251,191,36,0.2);border-radius:8px;color:var(--accent-gold);cursor:pointer;margin-top:0.5rem;">+ Add Note</button>
+            </div>
+        </div>
+    </div>
 
-        const animeQuotes = [
-            { text: "The only way to achieve the impossible is to believe it is possible.", author: "Charles Kingsley (Digimon Adventure)" },
-            { text: "A person grows up when he's able to overcome hardships.", author: "Jiraiya (Naruto)" },
-            { text: "The world isn't perfect. But it's there for us, trying the best it can.", author: "Roy Mustang (Fullmetal Alchemist)" },
-            { text: "If you don't like your destiny, don't accept it.", author: "Naruto Uzumaki" },
-            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Shoyo Hinata (Haikyuu!)" },
-            { text: "Hard work is worthless for those that don't believe in themselves.", author: "Naruto Uzumaki" },
-            { text: "When you give up, that's when the game ends.", author: "Mitsuyoshi Anzai (Slam Dunk)" }
+    <script>
+        // ==========================================
+        // DATA & STATE
+        // ==========================================
+        const DEFAULT_TASKS = [
+            { id: 1, text: 'Sort out SQL database setup', completed: false, priority: 'high' },
+            { id: 2, text: 'Sync Google Calendar with Mission Control', completed: false, priority: 'high' },
+            { id: 3, text: 'Set up Gmail email reading automation', completed: false, priority: 'high' },
+            { id: 4, text: 'Scrape Twitter/X for trading news', completed: false, priority: 'medium' },
+            { id: 5, text: 'Integrate Google API for news feed', completed: false, priority: 'medium' }
         ];
 
-        function getTimeOfDay() {
-            const hour = new Date().getHours();
-            if (hour >= 5 && hour < 12) return 'morning';
-            if (hour >= 12 && hour < 17) return 'afternoon';
-            return 'evening';
+        let tasks = JSON.parse(localStorage.getItem('mc_tasks_v7')) || DEFAULT_TASKS;
+        let showAllTasks = false;
+        let newTaskPriority = 'medium';
+        let currentCalendarDate = new Date();
+        let selectedDate = null;
+        let dateNotes = JSON.parse(localStorage.getItem('mc_dateNotes')) || {};
+
+        // ==========================================
+        // INITIALIZATION - Multiple strategies
+        // ==========================================
+        function init() {
+            console.log('[MC] Initializing...');
+            updateClock();
+            renderCalendar();
+            renderTasks();
+            loadBriefing();
+            fetchCryptoPrices();
+            setInterval(updateClock, 1000);
+            setInterval(fetchCryptoPrices, 300000);
+            console.log('[MC] Initialized successfully');
         }
 
-        function loadBriefing() {
-            const timeOfDay = getTimeOfDay();
-            const data = briefingData[timeOfDay];
-            
-            // Random anime quote
-            const randomQuote = animeQuotes[Math.floor(Math.random() * animeQuotes.length)];
-            
-            document.getElementById('greeting').textContent = data.greeting;
-            document.getElementById('subtitle').textContent = data.subtitle;
-            document.getElementById('briefingTitle').textContent = data.title;
-            
-            // Render quote
-            document.getElementById('quoteBox').innerHTML = `
-                ${randomQuote.text}
-                <div class="quote-author">— ${randomQuote.author}</div>
-            `;
-            
-            // Render news
-            const newsList = document.getElementById('newsList');
-            newsList.innerHTML = data.news.map(item => {
-                const previewText = item.summary 
-                    ? item.summary.substring(0, 50) + '...'
-                    : (item.bullets && item.bullets[0] ? item.bullets[0].substring(0, 50) + '...' : 'Click to read more...');
-                return `
-                <div class="news-item" onclick="openNewsModal(${item.id})">
-                    <div class="news-number">${item.id}</div>
-                    <div class="news-content">
-                        <div class="news-title">${item.title}</div>
-                        <div class="news-summary">${previewText}</div>
-                        <div class="news-meta">
-                            <span class="news-source">${item.source}</span>
-                            <span class="news-category">${item.category}</span>
-                        </div>
-                    </div>
-                </div>
-            `}).join('');
-            
-            // Store current news for modal
-            window.currentNews = data.news;
+        // Run immediately if DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
         }
 
-        function openNewsModal(newsId) {
-            const news = window.currentNews.find(n => n.id === newsId);
-            if (!news) return;
-            
-            document.getElementById('modalTitle').textContent = news.title;
-            document.getElementById('modalSource').textContent = news.source + ' • ' + news.category;
-            
-            // Render bullets or summary
-            let contentHtml = '';
-            if (news.bullets && news.bullets.length > 0) {
-                contentHtml = news.bullets.map(bullet => `• ${bullet}`).join('<br>');
-            } else if (news.summary) {
-                contentHtml = news.summary;
-            } else {
-                contentHtml = 'Click Read Full Article for more details.';
+        // Backup: run after window load
+        window.addEventListener('load', () => {
+            if (!window.mcInitDone) {
+                console.log('[MC] Backup init triggered');
+                init();
+                window.mcInitDone = true;
             }
-            document.getElementById('modalSummary').innerHTML = contentHtml;
-            document.getElementById('modalSummary').style.lineHeight = '2';
-            
-            document.getElementById('modalLink').href = news.url;
-            
-            document.getElementById('newsModal').classList.add('active');
-        }
+        });
 
-        function closeModal(event) {
-            if (!event || event.target.id === 'newsModal' || event.target.classList.contains('modal-close')) {
-                document.getElementById('newsModal').classList.remove('active');
-            }
-        }
-
-        // CRYPTO WATCHLIST
-        async function fetchCryptoPrices() {
-            const ids = 'bitcoin,ethereum,solana,cardano,avalanche-2';
-            const symbols = { 'bitcoin': 'btc', 'ethereum': 'eth', 'solana': 'sol', 'cardano': 'ada', 'avalanche-2': 'avax' };
-            
-            try {
-                const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
-                if (!response.ok) throw new Error('API limit reached');
-                const data = await response.json();
-                
-                for (const [coin, info] of Object.entries(data)) {
-                    const symbol = symbols[coin];
-                    const price = info.usd.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-                    const change = info.usd_24h_change.toFixed(2);
-                    const isUp = info.usd_24h_change >= 0;
-                    
-                    const priceEl = document.getElementById(`${symbol}-price`);
-                    const changeEl = document.getElementById(`${symbol}-change`);
-                    
-                    if (priceEl) {
-                        priceEl.textContent = price;
-                        priceEl.classList.remove('loading');
-                    }
-                    if (changeEl) {
-                        changeEl.textContent = (isUp ? '+' : '') + change + '%';
-                        changeEl.className = 'watchlist-change ' + (isUp ? 'up' : 'down');
-                    }
-                }
-            } catch (error) {
-                console.error('Failed to fetch crypto prices:', error);
-                // Fallback data
-                const fallback = [
-                    { id: 'btc', price: '$42,350', change: '+2.3%', up: true },
-                    { id: 'eth', price: '$2,280', change: '+1.8%', up: true },
-                    { id: 'sol', price: '$98.50', change: '+5.2%', up: true },
-                    { id: 'ada', price: '$0.48', change: '-0.5%', up: false },
-                    { id: 'avax', price: '$35.20', change: '+3.1%', up: true }
-                ];
-                
-                fallback.forEach(({ id, price, change, up }) => {
-                    const priceEl = document.getElementById(`${id}-price`);
-                    const changeEl = document.getElementById(`${id}-change`);
-                    if (priceEl) {
-                        priceEl.textContent = price;
-                        priceEl.classList.remove('loading');
-                    }
-                    if (changeEl) {
-                        changeEl.textContent = change;
-                        changeEl.className = 'watchlist-change ' + (up ? 'up' : 'down');
-                    }
-                });
-            }
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
-        }
-
+        // ==========================================
+        // CLOCK
+        // ==========================================
         function updateClock() {
             const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-            document.getElementById('date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+            const timeEl = document.getElementById('clock');
+            const greetingEl = document.getElementById('greeting');
+            const subtitleEl = document.getElementById('subtitle');
             
-            const targetDate = new Date('2025-12-31');
-            const daysRemaining = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
-            document.getElementById('daysToGoal').textContent = daysRemaining > 0 ? daysRemaining : 0;
-        }
-
-        // TASK SYSTEM - COMPLETE REWRITE
-        const DEFAULT_TASKS = [
-            'Sort out SQL database setup',
-            'Sync Google Calendar with Mission Control calendar',
-            'Set up Gmail email reading automation',
-            'Scrape Twitter/X for trading news',
-            'Integrate Google API for news feed'
-        ];
-
-        // Initialize tasks with defaults if empty
-        let taskData = JSON.parse(localStorage.getItem('mc_tasksData')) || {
-            version: 'v3',
-            tasks: DEFAULT_TASKS.map((text, i) => ({
-                id: i,
-                text: text,
-                completed: false
-            }))
-        };
-
-        // Force reset if version mismatch
-        if (taskData.version !== 'v3') {
-            taskData = {
-                version: 'v3',
-                tasks: DEFAULT_TASKS.map((text, i) => ({
-                    id: i,
-                    text: text,
-                    completed: false
-                }))
-            };
-            localStorage.setItem('mc_tasksData', JSON.stringify(taskData));
-        }
-
-        let completedTasksDB = JSON.parse(localStorage.getItem('mc_completedDB')) || [];
-
-        function renderAllTasks() {
-            console.log('[Mission Control] Rendering tasks...');
-            const container = document.getElementById('tasksContainer');
-            if (!container) {
-                console.error('[Mission Control] tasksContainer not found!');
-                return;
-            }
-
-            container.innerHTML = '';
-
-            // STRICTLY enforce exactly 5 tasks max
-            if (taskData.tasks.length > 5) {
-                taskData.tasks = taskData.tasks.slice(0, 5);
-                localStorage.setItem('mc_tasksData', JSON.stringify(taskData));
-            }
-
-            // Always show exactly 5 task lines
-            const displayTasks = taskData.tasks.length > 0 ? taskData.tasks : [];
-
-            // Ensure exactly 5 lines (pad with empties if needed)
-            while (displayTasks.length < 5) {
-                displayTasks.push({ id: Date.now() + displayTasks.length, text: '', completed: false });
-            }
-
-            displayTasks.forEach((task, index) => {
-                const line = document.createElement('div');
-                line.className = 'task-line';
-                line.innerHTML = `
-                    <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask(${index})">
-                        ${task.completed ? '✓' : ''}
-                    </div>
-                    <input type="text" class="task-input" value="${task.text}"
-                        placeholder="Enter task..."
-                        onchange="updateTaskText(${index}, this.value)"
-                        onblur="saveAllTasks()">
-                    <button class="task-delete" onclick="deleteTask(${index})">×</button>
-                `;
-                container.appendChild(line);
-            });
-        }
-
-        function toggleTask(index) {
-            taskData.tasks[index].completed = !taskData.tasks[index].completed;
+            if (timeEl) timeEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
             
-            if (taskData.tasks[index].completed && taskData.tasks[index].text.trim()) {
-                completedTasksDB.push({
-                    text: taskData.tasks[index].text,
-                    completedAt: new Date().toISOString()
-                });
-                localStorage.setItem('mc_completedDB', JSON.stringify(completedTasksDB));
+            const hour = now.getHours();
+            let greeting = 'Good evening';
+            let subtitle = 'Time to rest and recharge';
+            
+            if (hour >= 5 && hour < 12) {
+                greeting = 'Good morning';
+                subtitle = 'The early bird catches the alpha';
+            } else if (hour >= 12 && hour < 17) {
+                greeting = 'Good afternoon';
+                subtitle = 'Mid-day momentum check';
             }
             
-            saveAllTasks();
-            renderAllTasks();
+            if (greetingEl) greetingEl.textContent = greeting + ', Dibs!';
+            if (subtitleEl) subtitleEl.textContent = subtitle;
         }
 
-        function updateTaskText(index, text) {
-            taskData.tasks[index].text = text;
-        }
-
-        function deleteTask(index) {
-            taskData.tasks.splice(index, 1);
-            saveAllTasks();
-            renderAllTasks();
-        }
-
-        function addNewTaskLine() {
-            // STRICT LIMIT: Only add if less than 5 tasks
-            if (taskData.tasks.length >= 5) {
-                console.log('[Mission Control] Task limit reached (5 max)');
-                return;
-            }
-            taskData.tasks.push({
-                id: Date.now(),
-                text: '',
-                completed: false
-            });
-            saveAllTasks();
-            renderAllTasks();
-        }
-
-        function saveAllTasks() {
-            // Update from DOM
-            const inputs = document.querySelectorAll('#tasksContainer .task-input');
-            inputs.forEach((input, index) => {
-                if (taskData.tasks[index]) {
-                    taskData.tasks[index].text = input.value;
-                }
-            });
-            localStorage.setItem('mc_tasksData', JSON.stringify(taskData));
-        }
-
-        function clearCompletedTodos() {
-            taskData.tasks = taskData.tasks.filter(t => !t.completed);
-            saveAllTasks();
-            renderAllTasks();
-        }
-
-        function showCompletedHistory() {
-            const now = new Date();
-            const thisMonth = completedTasksDB.filter(t => {
-                const date = new Date(t.completedAt);
-                return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
-            });
-            
-            const totalCompleted = completedTasksDB.length;
-            const thisMonthCount = thisMonth.length;
-            
-            const message = `📊 TASK ANALYTICS
-
-Active Tasks: ${taskData.tasks.length}
-This Month Completed: ${thisMonthCount}
-Total History: ${totalCompleted}
-
-Recent Completed:
-${completedTasksDB.slice(-5).map(t => '✓ ' + t.text.substring(0, 30)).join('\n')}`;
-            
-            alert(message);
-        }
-
-        // GOOGLE CALENDAR SYNC (placeholder for future)
-        function syncWithGoogleCalendar() {
-            alert('🔗 Google Calendar Sync\n\nThis will:\n• Import your Google Calendar events\n• Sync tasks with Google Tasks\n• Show events on Mission Control calendar\n\nRequires Google OAuth setup. Coming soon!');
-        }
-
-        // CALENDAR - CLEAN IMPLEMENTATION
-        let dateNotes = JSON.parse(localStorage.getItem('mc_dateNotes')) || {};
-        let selectedDate = null;
-
-        function changeMonth(delta) {
-            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
-            generateCalendar();
-        }
-
-        function resetToToday() {
-            currentCalendarDate = new Date();
-            generateCalendar();
-        }
-
-        function generateCalendar() {
+        // ==========================================
+        // CALENDAR
+        // ==========================================
+        function renderCalendar() {
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
             const today = new Date();
             const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
             
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            document.getElementById('calendarMonth').textContent = monthNames[month] + ' ' + year;
+            const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            const monthEl = document.getElementById('calendarMonth');
+            const gridEl = document.getElementById('calendarGrid');
+            
+            if (monthEl) monthEl.textContent = monthNames[month] + ' ' + year;
+            if (!gridEl) return;
             
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
             
             let html = dayNames.map(d => `<div class="calendar-day-header">${d}</div>`).join('');
             
-            // Empty cells for days before month starts
-            for (let i = 0; i < firstDay; i++) {
-                html += '<div></div>';
-            }
+            for (let i = 0; i < firstDay; i++) html += '<div></div>';
             
-            // Days
             for (let day = 1; day <= daysInMonth; day++) {
                 const isToday = isCurrentMonth && day === today.getDate();
                 const dateKey = `${year}-${month}-${day}`;
-                const dayNotes = dateNotes[dateKey] || [];
-                const hasNote = dayNotes.length > 0;
-                const noteText = hasNote ? dayNotes[0].text.substring(0, 8) + (dayNotes[0].text.length > 8 ? '...' : '') : '';
-                
-                const classes = ['calendar-day-cell'];
-                if (isToday) classes.push('today');
-                if (hasNote) classes.push('has-note');
+                const notes = dateNotes[dateKey] || [];
+                const hasNote = notes.length > 0;
                 
                 html += `
-                    <div class="${classes.join(' ')}" onclick="openDateModal(${day})" title="${hasNote ? dayNotes[0].text : 'Click to add note'}">
-                        <span class="calendar-day-number">${day}</span>
-                        ${hasNote ? `<span class="calendar-note-indicator">📝 ${noteText}</span>` : ''}
+                    <div class="calendar-day ${isToday ? 'today' : ''}" onclick="openDateModal(${day})">
+                        <span class="calendar-day-num">${day}</span>
+                        ${hasNote ? `<span class="calendar-day-note">${notes[0].text.substring(0, 10)}${notes[0].text.length > 10 ? '...' : ''}</span>` : ''}
                     </div>
                 `;
             }
             
-            document.getElementById('calendarGrid').innerHTML = html;
+            gridEl.innerHTML = html;
+        }
+
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function resetToToday() {
+            currentCalendarDate = new Date();
+            renderCalendar();
         }
 
         function openDateModal(day) {
@@ -1137,172 +419,300 @@ ${completedTasksDB.slice(-5).map(t => '✓ ' + t.text.substring(0, 30)).join('\n
             const dateKey = `${year}-${month}-${day}`;
             const notes = dateNotes[dateKey] || [];
             
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            document.getElementById('dateModalTitle').textContent = `${monthNames[month]} ${day}, ${year}`;
-            document.getElementById('dateNoteInput').value = '';
+            const titleEl = document.getElementById('dateModalTitle');
+            const listEl = document.getElementById('dateNotesList');
             
-            const notesList = document.getElementById('dateNotesList');
-            if (notes.length === 0) {
-                notesList.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: var(--spacing-md);">No notes for this date</div>';
-            } else {
-                notesList.innerHTML = notes.map((note, idx) => `
-                    <div class="date-note-item">
-                        <span class="date-note-text">${note.text}</span>
-                        <button class="date-note-delete" onclick="deleteDateNote(${idx})">×</button>
-                    </div>
-                `).join('');
+            if (titleEl) {
+                const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                titleEl.textContent = `${monthNames[month]} ${day}, ${year}`;
             }
             
-            document.getElementById('dateModal').classList.add('active');
+            if (listEl) {
+                if (notes.length === 0) {
+                    listEl.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:1rem;">No notes for this date</div>';
+                } else {
+                    listEl.innerHTML = notes.map((note, idx) => `
+                        <div style="display:flex;align-items:flex-start;gap:0.5rem;padding:0.5rem;background:rgba(251,191,36,0.05);border-radius:8px;margin-bottom:0.5rem;">
+                            <span style="flex:1;font-size:0.875rem;">${note.text}</span>
+                            <button onclick="deleteDateNote(${idx})" style="background:none;border:none;color:var(--text-muted);cursor:pointer;">×</button>
+                        </div>
+                    `).join('');
+                }
+            }
+            
+            const modal = document.getElementById('dateModal');
+            if (modal) modal.style.display = 'flex';
         }
 
-        function closeDateModal(event) {
-            if (!event || event.target.id === 'dateModal' || event.target.classList.contains('date-modal-close')) {
-                document.getElementById('dateModal').classList.remove('active');
-                selectedDate = null;
-            }
+        function closeDateModal() {
+            const modal = document.getElementById('dateModal');
+            if (modal) modal.style.display = 'none';
+            selectedDate = null;
         }
 
         function addDateNote() {
             if (!selectedDate) return;
-            
             const input = document.getElementById('dateNoteInput');
-            const text = input.value.trim();
+            const text = input ? input.value.trim() : '';
             if (!text) return;
             
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
             const dateKey = `${year}-${month}-${selectedDate}`;
             
-            if (!dateNotes[dateKey]) {
-                dateNotes[dateKey] = [];
-            }
-            
-            dateNotes[dateKey].push({
-                id: Date.now(),
-                text: text,
-                created: new Date().toISOString()
-            });
+            if (!dateNotes[dateKey]) dateNotes[dateKey] = [];
+            dateNotes[dateKey].push({ text, created: new Date().toISOString() });
             
             localStorage.setItem('mc_dateNotes', JSON.stringify(dateNotes));
-            input.value = '';
+            if (input) input.value = '';
             openDateModal(selectedDate);
-            generateCalendar();
+            renderCalendar();
         }
 
         function deleteDateNote(idx) {
             if (!selectedDate) return;
-            
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
             const dateKey = `${year}-${month}-${selectedDate}`;
             
             if (dateNotes[dateKey]) {
                 dateNotes[dateKey].splice(idx, 1);
-                if (dateNotes[dateKey].length === 0) {
-                    delete dateNotes[dateKey];
-                }
+                if (dateNotes[dateKey].length === 0) delete dateNotes[dateKey];
                 localStorage.setItem('mc_dateNotes', JSON.stringify(dateNotes));
                 openDateModal(selectedDate);
-                generateCalendar();
+                renderCalendar();
             }
         }
 
-        // AI COSTS FUNCTIONS
-        function refreshAICosts() {
-            // Simulate refreshing costs - in real implementation, this would fetch from API
-            const btn = event.target;
-            btn.textContent = '⟳ Loading...';
-            setTimeout(() => {
-                btn.textContent = '↻ Refresh';
-                alert('📊 AI Costs Updated!\n\nCurrent Session:\n• Kimi K2.5: ~280K tokens ($0.40)\n• Groq Whisper: ~5 min audio ($0.02)\n• Local LLM: $0.00\n\nTotal: ~$0.42');
-            }, 500);
-        }
-        function showTradingAPIInfo() {
-            const info = `
-TRADING NEWS APIs:
-
-📊 Trading Economics (https://tradingeconomics.com/api)
-• Free tier: 250 requests/month
-• Paid: $99/month for 10,000 requests
-• Data: Economic calendar, indicators, news
-• Best for: Macro events, interest rates, GDP
-
-📈 Forex Factory (https://www.forexfactory.com/calendar)
-• No official API (scraping required)
-• Alternative: RSS feeds available
-• Best for: Economic calendar events
-• Workaround: Use Calendar API services
-
-🔥 RECOMMENDED ALTERNATIVES:
-
-1. NewsAPI.org ($0-449/month)
-   - General news with finance category
-   - Easy REST API
-   
-2. Finnhub.io (Free-$100/month)
-   - Stock/crypto news
-   - WebSocket real-time
-   
-3. CryptoPanic (Free-Pro)
-   - Crypto-specific news
-   - Sentiment analysis
-   
-4. OpenClaw Integration:
-   - Use SearXNG locally
-   - Aggregate from multiple sources
-   - No API limits, fully private
-
-Want me to integrate any of these?`;
-            alert(info);
-        }
-
-        // INIT - Auto-load everything
-        let currentCalendarDate = new Date();
-
-        function initMissionControl() {
-            console.log('[Mission Control] Initializing...');
+        // ==========================================
+        // CRYPTO
+        // ==========================================
+        async function fetchCryptoPrices() {
+            const ids = 'bitcoin,ethereum,solana,cardano,avalanche-2';
+            const symbols = { bitcoin: 'btc', ethereum: 'eth', solana: 'sol', cardano: 'ada', 'avalanche-2': 'avax' };
             
             try {
-                updateClock();
-                console.log('[Mission Control] Clock initialized');
+                const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
+                if (!response.ok) throw new Error('API error');
+                const data = await response.json();
                 
-                generateCalendar();
-                console.log('[Mission Control] Calendar initialized');
-                
-                renderAllTasks();
-                console.log('[Mission Control] Tasks initialized');
-                
-                loadBriefing();
-                console.log('[Mission Control] Briefing loaded');
-                
-                fetchCryptoPrices();
-                console.log('[Mission Control] Crypto prices fetched');
-                
-                setInterval(updateClock, 1000);
-                setInterval(fetchCryptoPrices, 300000);
-                
-                console.log('[Mission Control] Initialization complete ✓');
-            } catch (error) {
-                console.error('[Mission Control] Initialization error:', error);
+                for (const [coin, info] of Object.entries(data)) {
+                    const sym = symbols[coin];
+                    const priceEl = document.getElementById(`${sym}-price`);
+                    const changeEl = document.getElementById(`${sym}-change`);
+                    
+                    if (priceEl) priceEl.textContent = '$' + info.usd.toLocaleString();
+                    if (changeEl) {
+                        const change = info.usd_24h_change;
+                        changeEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+                        changeEl.className = 'watchlist-change ' + (change >= 0 ? 'up' : 'down');
+                    }
+                }
+            } catch (e) {
+                console.log('[MC] Crypto fetch failed, using fallback');
+                const fallback = { btc: [67704, 0.67], eth: [2958, 0.46], sol: [84.38, 1.78], ada: [0.28, 3.24], avax: [9.15, 2.42] };
+                for (const [sym, [price, change]] of Object.entries(fallback)) {
+                    const priceEl = document.getElementById(`${sym}-price`);
+                    const changeEl = document.getElementById(`${sym}-change`);
+                    if (priceEl) priceEl.textContent = '$' + price.toLocaleString();
+                    if (changeEl) {
+                        changeEl.textContent = (change >= 0 ? '+' : '') + change + '%';
+                        changeEl.className = 'watchlist-change ' + (change >= 0 ? 'up' : 'down');
+                    }
+                }
             }
         }
 
-        // Multiple initialization strategies for reliability
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initMissionControl);
-        } else {
-            initMissionControl();
+        // ==========================================
+        // TASKS - NEW DESIGN
+        // ==========================================
+        function renderTasks() {
+            const listEl = document.getElementById('taskList');
+            const showMoreBtn = document.getElementById('showMoreBtn');
+            if (!listEl) return;
+            
+            // Sort: incomplete first, then by priority
+            const sorted = [...tasks].sort((a, b) => {
+                if (a.completed !== b.completed) return a.completed ? 1 : -1;
+                const prioOrder = { high: 0, medium: 1, low: 2 };
+                return prioOrder[a.priority] - prioOrder[b.priority];
+            });
+            
+            const displayTasks = showAllTasks ? sorted : sorted.slice(0, 5);
+            
+            listEl.innerHTML = displayTasks.map((task, idx) => `
+                <div class="task-item ${task.completed ? 'completed' : ''}" data-id="${task.id}">
+                    <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask(${task.id})">${task.completed ? '✓' : ''}</div>
+                    <div class="task-content">
+                        <input type="text" class="task-input ${task.completed ? 'completed' : ''}" value="${task.text}" 
+                            onchange="updateTaskText(${task.id}, this.value)" 
+                            onblur="saveTasks()">
+                    </div>
+                    <span class="task-priority ${task.priority}" onclick="cycleTaskPriority(${task.id})">${task.priority}</span>
+                    <button class="task-delete" onclick="deleteTask(${task.id})">×</button>
+                </div>
+            `).join('');
+            
+            if (showMoreBtn) {
+                showMoreBtn.style.display = sorted.length > 5 ? 'block' : 'none';
+                showMoreBtn.textContent = showAllTasks ? 'Show Less' : `Show More (${sorted.length - 5})`;
+            }
         }
 
-        // Backup: also run after window load
-        window.addEventListener('load', function() {
-            if (!window.mcInitialized) {
-                console.log('[Mission Control] Backup initialization triggered');
-                initMissionControl();
-                window.mcInitialized = true;
+        function toggleShowMore() {
+            showAllTasks = !showAllTasks;
+            renderTasks();
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveTasks();
+                renderTasks();
             }
-        });
+        }
+
+        function updateTaskText(id, text) {
+            const task = tasks.find(t => t.id === id);
+            if (task) task.text = text;
+        }
+
+        function cycleTaskPriority(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                const order = ['high', 'medium', 'low'];
+                const currentIdx = order.indexOf(task.priority);
+                task.priority = order[(currentIdx + 1) % order.length];
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function cyclePriority() {
+            const order = ['HIGH', 'MEDIUM', 'LOW'];
+            const values = ['high', 'medium', 'low'];
+            const currentIdx = order.indexOf(newTaskPriority.toUpperCase());
+            const nextIdx = (currentIdx + 1) % order.length;
+            newTaskPriority = values[nextIdx];
+            const btn = document.getElementById('newTaskPriority');
+            if (btn) {
+                btn.textContent = order[nextIdx];
+                btn.className = 'task-add-priority ' + newTaskPriority;
+            }
+        }
+
+        function addTask() {
+            const input = document.getElementById('newTaskInput');
+            const text = input ? input.value.trim() : '';
+            if (!text) return;
+            
+            tasks.push({
+                id: Date.now(),
+                text: text,
+                completed: false,
+                priority: newTaskPriority
+            });
+            
+            if (input) input.value = '';
+            saveTasks();
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+            renderTasks();
+        }
+
+        function clearCompleted() {
+            tasks = tasks.filter(t => !t.completed);
+            saveTasks();
+            renderTasks();
+        }
+
+        function saveTasks() {
+            localStorage.setItem('mc_tasks_v7', JSON.stringify(tasks));
+            // TODO: Sync with backend/Astra
+        }
+
+        // ==========================================
+        // BRIEFING & NEWS
+        // ==========================================
+        const quotes = [
+            { text: "The only way to achieve the impossible is to believe it is possible.", author: "Charles Kingsley" },
+            { text: "A person grows up when he's able to overcome hardships.", author: "Jiraiya" },
+            { text: "The world isn't perfect. But it's there for us, trying the best it can.", author: "Roy Mustang" },
+            { text: "If you don't like your destiny, don't accept it.", author: "Naruto Uzumaki" },
+            { text: "Hard work is worthless for those that don't believe in themselves.", author: "Naruto Uzumaki" }
+        ];
+
+        const newsData = {
+            morning: [
+                { id: 1, title: "Bitcoin breaks $42K resistance", source: "CoinDesk", category: "Trading", summary: "BTC shows strong momentum after weeks of consolidation." },
+                { id: 2, title: "OpenClaw releases agent framework", source: "TechCrunch", category: "AI", summary: "Major update enables 100 parallel agents for complex tasks." },
+                { id: 3, title: "Crypto market cap hits $1.6T", source: "Reuters", category: "Market", summary: "Overall market showing bullish sentiment as traditional finance eyes crypto." },
+                { id: 4, title: "Remote work trends 2026", source: "Forbes", category: "Business", summary: "Trading from anywhere becoming standard. Tax implications explored." },
+                { id: 5, title: "10 habits of successful traders", source: "Bloomberg", category: "Development", summary: "Discipline, journaling, and risk management top the list." }
+            ],
+            afternoon: [
+                { id: 1, title: "ETH staking rewards increase", source: "CoinTelegraph", category: "Trading", summary: "Annual yield now at 4.2% as validator participation grows." },
+                { id: 2, title: "AI coding assistants comparison", source: "The Verge", category: "AI", summary: "Kimi leads in complex reasoning tasks while maintaining cost efficiency." },
+                { id: 3, title: "Side hustle income tax guide", source: "WSJ", category: "Business", summary: "2026 tax updates for freelancers and independent traders." },
+                { id: 4, title: "Solana ecosystem growth", source: "Decrypt", category: "Market", summary: "DeFi TVL up 15% this month. NFT marketplace activity resurging." },
+                { id: 5, title: "Time management for traders", source: "Inc", category: "Development", summary: "Focus blocks vs Pomodoro: Which works better for deep analysis?" }
+            ],
+            evening: [
+                { id: 1, title: "Daily crypto market wrap", source: "CoinDesk", category: "Trading", summary: "BTC +2.3%, ETH +1.8%, SOL +5.2%. Volume above average." },
+                { id: 2, title: "OpenAI announces new model", source: "TechCrunch", category: "AI", summary: "Multimodal capabilities expanded. Competition heating up." },
+                { id: 3, title: "Freelance economy report 2026", source: "Forbes", category: "Business", summary: "Independent work up 23% YoY. Trading as primary income growing." },
+                { id: 4, title: "Global markets close mixed", source: "Reuters", category: "Market", summary: "Asia markets up 1-2%. Crypto showing relative strength." },
+                { id: 5, title: "Sleep and performance link", source: "Harvard Health", category: "Development", summary: "Quality rest improves decisions by 40%. Recovery is part of strategy." }
+            ]
+        };
+
+        function loadBriefing() {
+            const hour = new Date().getHours();
+            let timeOfDay = 'evening';
+            if (hour >= 5 && hour < 12) timeOfDay = 'morning';
+            else if (hour >= 12 && hour < 17) timeOfDay = 'afternoon';
+            
+            const news = newsData[timeOfDay];
+            const quote = quotes[Math.floor(Math.random() * quotes.length)];
+            
+            const newsEl = document.getElementById('newsList');
+            const quoteEl = document.getElementById('quoteBox');
+            
+            if (newsEl) {
+                newsEl.innerHTML = news.map(item => `
+                    <div class="news-item" onclick="window.open('https://${item.source.toLowerCase().replace(/\s/g, '')}.com', '_blank')">
+                        <div class="news-num">${item.id}</div>
+                        <div class="news-content">
+                            <div class="news-title">${item.title}</div>
+                            <div class="news-preview">${item.summary}</div>
+                            <div class="news-meta">
+                                <span class="news-source">${item.source}</span>
+                                <span class="news-cat">${item.category}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            if (quoteEl) {
+                quoteEl.innerHTML = `${quote.text}<div class="quote-author">— ${quote.author}</div>`;
+            }
+        }
+
+        // ==========================================
+        // UTILS
+        // ==========================================
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
     </script>
 </body>
 </html>
