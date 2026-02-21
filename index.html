@@ -458,7 +458,6 @@
                         Tasks
                     </h2>
                     <div style="display: flex; gap: var(--spacing-sm);">
-                        <button class="btn btn-secondary" onclick="syncWithGoogleCalendar()">🔗 Sync Google</button>
                         <button class="btn btn-secondary" onclick="showCompletedHistory()">📊 History</button>
                         <button class="btn btn-secondary" onclick="clearCompletedTodos()">Clear Done</button>
                     </div>
@@ -785,19 +784,23 @@
             
             // Render news
             const newsList = document.getElementById('newsList');
-            newsList.innerHTML = data.news.map(item => `
+            newsList.innerHTML = data.news.map(item => {
+                const previewText = item.summary 
+                    ? item.summary.substring(0, 50) + '...'
+                    : (item.bullets && item.bullets[0] ? item.bullets[0].substring(0, 50) + '...' : 'Click to read more...');
+                return `
                 <div class="news-item" onclick="openNewsModal(${item.id})">
                     <div class="news-number">${item.id}</div>
                     <div class="news-content">
                         <div class="news-title">${item.title}</div>
-                        <div class="news-summary">${item.bullets[0].substring(0, 50)}...</div>
+                        <div class="news-summary">${previewText}</div>
                         <div class="news-meta">
                             <span class="news-source">${item.source}</span>
                             <span class="news-category">${item.category}</span>
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
             
             // Store current news for modal
             window.currentNews = data.news;
@@ -810,9 +813,16 @@
             document.getElementById('modalTitle').textContent = news.title;
             document.getElementById('modalSource').textContent = news.source + ' • ' + news.category;
             
-            // Render bullets
-            const bulletsHtml = news.bullets.map(bullet => `• ${bullet}`).join('\n');
-            document.getElementById('modalSummary').innerHTML = bulletsHtml.replace(/\n/g, '<br>');
+            // Render bullets or summary
+            let contentHtml = '';
+            if (news.bullets && news.bullets.length > 0) {
+                contentHtml = news.bullets.map(bullet => `• ${bullet}`).join('<br>');
+            } else if (news.summary) {
+                contentHtml = news.summary;
+            } else {
+                contentHtml = 'Click Read Full Article for more details.';
+            }
+            document.getElementById('modalSummary').innerHTML = contentHtml;
             document.getElementById('modalSummary').style.lineHeight = '2';
             
             document.getElementById('modalLink').href = news.url;
@@ -934,18 +944,32 @@
         function renderAllTasks() {
             const container = document.getElementById('tasksContainer');
             if (!container) return;
-            
+
             container.innerHTML = '';
-            
-            taskData.tasks.forEach((task, index) => {
+
+            // Always show at least 5 task lines
+            const displayTasks = taskData.tasks.length > 0 ? taskData.tasks : [
+                { id: 0, text: '', completed: false },
+                { id: 1, text: '', completed: false },
+                { id: 2, text: '', completed: false },
+                { id: 3, text: '', completed: false },
+                { id: 4, text: '', completed: false }
+            ];
+
+            // Ensure at least 5 lines
+            while (displayTasks.length < 5) {
+                displayTasks.push({ id: Date.now() + displayTasks.length, text: '', completed: false });
+            }
+
+            displayTasks.forEach((task, index) => {
                 const line = document.createElement('div');
                 line.className = 'task-line';
                 line.innerHTML = `
                     <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask(${index})">
                         ${task.completed ? '✓' : ''}
                     </div>
-                    <input type="text" class="task-input" value="${task.text}" 
-                        placeholder="Task ${index + 1}..." 
+                    <input type="text" class="task-input" value="${task.text}"
+                        placeholder="Enter task..."
                         onchange="updateTaskText(${index}, this.value)"
                         onblur="saveAllTasks()">
                     <button class="task-delete" onclick="deleteTask(${index})">×</button>
@@ -1218,15 +1242,15 @@ Want me to integrate any of these?`;
         }
 
         // INIT - Auto-load everything
+        let currentCalendarDate = new Date(); // Initialize calendar date
+
         document.addEventListener('DOMContentLoaded', function() {
-            loadBriefing();
             updateClock();
             generateCalendar();
             renderAllTasks();
-            
-            // Auto-fetch crypto prices after a short delay
-            setTimeout(fetchCryptoPrices, 500);
-            
+            loadBriefing();
+            fetchCryptoPrices();
+
             setInterval(updateClock, 1000);
             setInterval(fetchCryptoPrices, 300000); // Refresh every 5 minutes
         });
