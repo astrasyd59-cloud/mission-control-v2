@@ -189,13 +189,50 @@
         .metric-trend { font-size: 0.8125rem; display: flex; align-items: center; gap: 4px; }
         .trend-up { color: var(--success); }
 
-        /* CALENDAR WIDGET */
-        .calendar-widget { background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(245, 158, 11, 0.05) 100%); border: 1px solid rgba(251, 191, 36, 0.15); border-radius: var(--radius-md); padding: var(--spacing-md); min-width: 200px; }
-        .calendar-header { font-size: 0.875rem; font-weight: 600; color: var(--accent-gold); margin-bottom: var(--spacing-sm); text-align: center; text-transform: uppercase; letter-spacing: 0.1em; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
-        .calendar-day { font-size: 0.6875rem; color: var(--text-muted); padding: 4px; }
+        /* CALENDAR WIDGET - CLEAN REWRITE */
+        .calendar-section { background: linear-gradient(135deg, rgba(251, 191, 36, 0.05) 0%, rgba(20, 20, 24, 0.8) 100%); border: 1px solid rgba(251, 191, 36, 0.15); border-radius: var(--radius-lg); padding: var(--spacing-lg); margin-bottom: var(--spacing-xl); }
+        .calendar-header-main { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md); }
+        .calendar-title { font-size: 1.125rem; font-weight: 600; color: var(--accent-gold); }
+        .calendar-nav { display: flex; gap: var(--spacing-sm); }
+        .calendar-nav-btn { background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.2); color: var(--accent-gold); padding: var(--spacing-xs) var(--spacing-sm); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.875rem; }
+        .calendar-nav-btn:hover { background: rgba(251, 191, 36, 0.2); }
+        .calendar-grid-main { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+        .calendar-day-header { font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: var(--spacing-xs); font-weight: 500; }
+        .calendar-day-cell { 
+            aspect-ratio: 1; 
+            background: rgba(20, 20, 24, 0.6); 
+            border: 1px solid rgba(251, 191, 36, 0.05); 
+            border-radius: var(--radius-sm); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            transition: var(--transition-fast);
+            min-height: 60px;
+        }
+        .calendar-day-cell:hover { background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.3); }
+        .calendar-day-cell.today { background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(245, 158, 11, 0.2) 100%); border-color: var(--accent-gold); }
+        .calendar-day-cell.has-note { border-color: var(--accent-gold); }
+        .calendar-day-number { font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); }
+        .calendar-day-cell.today .calendar-day-number { color: var(--accent-gold); }
+        .calendar-note-indicator { font-size: 0.625rem; color: var(--accent-gold); margin-top: 2px; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
 
-        /* API INFO SECTION */
+        /* TASKS - FIXED 5 LINES */
+        .tasks-container { background: rgba(20, 20, 24, 0.6); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md); }
+        .task-line { display: flex; align-items: center; gap: var(--spacing-sm); padding: var(--spacing-sm); border-bottom: 1px solid rgba(251, 191, 36, 0.05); min-height: 44px; }
+        .task-line:last-child { border-bottom: none; }
+        .task-line.empty { opacity: 0.5; }
+        .task-checkbox { width: 20px; height: 20px; border: 2px solid rgba(251, 191, 36, 0.3); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--transition-fast); }
+        .task-checkbox:hover { border-color: var(--accent-gold); }
+        .task-checkbox.checked { background: var(--accent-gold); border-color: var(--accent-gold); color: var(--bg-primary); font-size: 0.75rem; }
+        .task-input { flex: 1; background: transparent; border: none; color: var(--text-primary); font-size: 0.9375rem; outline: none; }
+        .task-input::placeholder { color: var(--text-muted); }
+        .task-delete { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem; opacity: 0; transition: var(--transition-fast); }
+        .task-line:hover .task-delete { opacity: 1; }
+        .task-delete:hover { color: var(--danger); }
+        .add-task-btn { width: 100%; padding: var(--spacing-sm); background: rgba(251, 191, 36, 0.05); border: 1px dashed rgba(251, 191, 36, 0.3); border-radius: var(--radius-md); color: var(--accent-gold); cursor: pointer; font-size: 0.9375rem; margin-top: var(--spacing-sm); transition: var(--transition-fast); }
+        .add-task-btn:hover { background: rgba(251, 191, 36, 0.1); }
         .api-info { background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.05) 100%); border: 1px solid rgba(59, 130, 246, 0.15); border-radius: var(--radius-md); padding: var(--spacing-md); margin-top: var(--spacing-md); }
         .api-info-title { font-size: 0.875rem; font-weight: 600; color: var(--info); margin-bottom: var(--spacing-xs); }
         .api-info-text { font-size: 0.8125rem; color: var(--text-muted); line-height: 1.5; }
@@ -339,19 +376,25 @@
                             </div>
                         </div>
                     </div>
-                    <!-- CALENDAR WIDGET -->
-                    <div class="calendar-widget">
-                        <div class="calendar-header">
-                            <span id="calendarMonth">February 2026</span>
-                        </div>
-                        <div class="calendar-grid" id="calendarGrid">
-                            <!-- Generated by JS -->
-                        </div>
-                    </div>
                     <div class="hero-datetime">
                         <div class="hero-time" id="clock">12:46</div>
                         <div class="hero-date" id="date">Saturday, February 21</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- CALENDAR SECTION -->
+            <div class="calendar-section">
+                <div class="calendar-header-main">
+                    <span class="calendar-title" id="calendarMonth">February 2026</span>
+                    <div class="calendar-nav">
+                        <button class="calendar-nav-btn" onclick="changeMonth(-1)">←</button>
+                        <button class="calendar-nav-btn" onclick="resetToToday()">Today</button>
+                        <button class="calendar-nav-btn" onclick="changeMonth(1)">→</button>
+                    </div>
+                </div>
+                <div class="calendar-grid-main" id="calendarGrid">
+                    <!-- Generated by JS -->
                 </div>
             </div>
 
@@ -418,15 +461,35 @@
                         <button class="btn btn-secondary" onclick="clearCompletedTodos()">Clear Done</button>
                     </div>
                 </div>
-                <div id="todoList">
-                    <!-- Todos generated by JS -->
+                <div class="tasks-container" id="tasksContainer">
+                    <!-- 5 fixed task lines -->
+                    <div class="task-line" id="task-line-0">
+                        <div class="task-checkbox" id="task-check-0" onclick="toggleFixedTask(0)"></div>
+                        <input type="text" class="task-input" id="task-input-0" placeholder="Task 1..." onblur="saveFixedTasks()">
+                        <button class="task-delete" onclick="clearFixedTask(0)">×</button>
+                    </div>
+                    <div class="task-line" id="task-line-1">
+                        <div class="task-checkbox" id="task-check-1" onclick="toggleFixedTask(1)"></div>
+                        <input type="text" class="task-input" id="task-input-1" placeholder="Task 2..." onblur="saveFixedTasks()">
+                        <button class="task-delete" onclick="clearFixedTask(1)">×</button>
+                    </div>
+                    <div class="task-line" id="task-line-2">
+                        <div class="task-checkbox" id="task-check-2" onclick="toggleFixedTask(2)"></div>
+                        <input type="text" class="task-input" id="task-input-2" placeholder="Task 3..." onblur="saveFixedTasks()">
+                        <button class="task-delete" onclick="clearFixedTask(2)">×</button>
+                    </div>
+                    <div class="task-line" id="task-line-3">
+                        <div class="task-checkbox" id="task-check-3" onclick="toggleFixedTask(3)"></div>
+                        <input type="text" class="task-input" id="task-input-3" placeholder="Task 4..." onblur="saveFixedTasks()">
+                        <button class="task-delete" onclick="clearFixedTask(3)">×</button>
+                    </div>
+                    <div class="task-line" id="task-line-4">
+                        <div class="task-checkbox" id="task-check-4" onclick="toggleFixedTask(4)"></div>
+                        <input type="text" class="task-input" id="task-input-4" placeholder="Task 5..." onblur="saveFixedTasks()">
+                        <button class="task-delete" onclick="clearFixedTask(4)">×</button>
+                    </div>
                 </div>
-                <div style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-md);">
-                    <input type="text" id="newTodoInput" placeholder="Add new task..." 
-                        style="flex: 1; background: rgba(251, 191, 36, 0.05); border: 1px solid rgba(251, 191, 36, 0.2); border-radius: var(--radius-md); padding: var(--spacing-sm) var(--spacing-md); color: var(--text-primary); font-size: 0.9375rem;"
-                        onkeypress="if(event.key==='Enter')addTodo()">
-                    <button class="btn" onclick="addTodo()">+ Add</button>
-                </div>
+                <button class="add-task-btn" onclick="addNewTaskLine()">+ Add Another Task</button>
             </div>
 
             <!-- NEWS BRIEFING -->
@@ -678,97 +741,158 @@
             document.getElementById('daysToGoal').textContent = daysRemaining > 0 ? daysRemaining : 0;
         }
 
-        // TODO LIST FUNCTIONS
-        let todos = JSON.parse(localStorage.getItem('mc_todos')) || [
-            { id: 1, text: 'Review trading positions', completed: false },
-            { id: 2, text: 'File links in archive', completed: false },
-            { id: 3, text: 'Check crypto watchlist', completed: true }
+        // FIXED TASKS SYSTEM - 5 LINES
+        let currentCalendarDate = new Date();
+        let fixedTasks = JSON.parse(localStorage.getItem('mc_fixedTasks')) || [
+            { text: '', completed: false },
+            { text: '', completed: false },
+            { text: '', completed: false },
+            { text: '', completed: false },
+            { text: '', completed: false }
         ];
-        
-        // Completed tasks database for analytics
+        let extraTasks = JSON.parse(localStorage.getItem('mc_extraTasks')) || [];
         let completedTasksDB = JSON.parse(localStorage.getItem('mc_completedDB')) || [];
 
-        function saveTodos() {
-            localStorage.setItem('mc_todos', JSON.stringify(todos));
-            renderTodos();
-        }
-
-        function renderTodos() {
-            const container = document.getElementById('todoList');
-            if (todos.length === 0) {
-                container.innerHTML = '<div class="todo-empty">No tasks yet. Add one above! 👆</div>';
-                return;
+        function loadFixedTasks() {
+            // Load first 5 fixed tasks
+            for (let i = 0; i < 5; i++) {
+                const task = fixedTasks[i] || { text: '', completed: false };
+                const input = document.getElementById(`task-input-${i}`);
+                const checkbox = document.getElementById(`task-check-${i}`);
+                if (input) input.value = task.text;
+                if (checkbox) {
+                    checkbox.innerHTML = task.completed ? '✓' : '';
+                    checkbox.className = 'task-checkbox ' + (task.completed ? 'checked' : '');
+                }
             }
-            
-            container.innerHTML = todos.map(todo => `
-                <div class="todo-item ${todo.completed ? 'completed' : ''}">
-                    <div class="todo-checkbox ${todo.completed ? 'checked' : ''}" onclick="toggleTodo(${todo.id})">
-                        ${todo.completed ? '✓' : ''}
-                    </div>
-                    <div class="todo-text" onclick="editTodo(${todo.id})">${todo.text}</div>
-                    <button class="todo-delete" onclick="deleteTodo(${todo.id})" title="Delete">×</button>
-                </div>
-            `).join('');
+            // Render extra tasks
+            renderExtraTasks();
         }
 
-        function addTodo() {
-            const input = document.getElementById('newTodoInput');
-            const text = input.value.trim();
-            if (!text) return;
-            
-            todos.push({
-                id: Date.now(),
-                text: text,
-                completed: false,
-                createdAt: new Date().toISOString()
-            });
-            input.value = '';
-            saveTodos();
+        function saveFixedTasks() {
+            for (let i = 0; i < 5; i++) {
+                const input = document.getElementById(`task-input-${i}`);
+                const checkbox = document.getElementById(`task-check-${i}`);
+                fixedTasks[i] = {
+                    text: input ? input.value : '',
+                    completed: checkbox ? checkbox.classList.contains('checked') : false
+                };
+            }
+            localStorage.setItem('mc_fixedTasks', JSON.stringify(fixedTasks));
         }
 
-        function toggleTodo(id) {
-            const todo = todos.find(t => t.id === id);
-            if (todo) {
-                todo.completed = !todo.completed;
-                
-                // If marking as completed, add to database
-                if (todo.completed) {
+        function toggleFixedTask(index) {
+            const checkbox = document.getElementById(`task-check-${index}`);
+            const input = document.getElementById(`task-input-${index}`);
+            const isCompleted = checkbox.classList.contains('checked');
+            
+            if (isCompleted) {
+                checkbox.classList.remove('checked');
+                checkbox.innerHTML = '';
+            } else {
+                checkbox.classList.add('checked');
+                checkbox.innerHTML = '✓';
+                // Add to completed database
+                if (input && input.value.trim()) {
                     completedTasksDB.push({
-                        id: todo.id,
-                        text: todo.text,
-                        completedAt: new Date().toISOString(),
-                        createdAt: todo.createdAt || new Date().toISOString()
+                        text: input.value.trim(),
+                        completedAt: new Date().toISOString()
                     });
                     localStorage.setItem('mc_completedDB', JSON.stringify(completedTasksDB));
                 }
-                
-                saveTodos();
             }
+            saveFixedTasks();
         }
 
-        function editTodo(id) {
-            const todo = todos.find(t => t.id === id);
-            if (!todo) return;
+        function clearFixedTask(index) {
+            const input = document.getElementById(`task-input-${index}`);
+            const checkbox = document.getElementById(`task-check-${index}`);
+            if (input) input.value = '';
+            if (checkbox) {
+                checkbox.classList.remove('checked');
+                checkbox.innerHTML = '';
+            }
+            saveFixedTasks();
+        }
+
+        function renderExtraTasks() {
+            // Remove old extra task lines
+            const oldExtras = document.querySelectorAll('.task-line.extra');
+            oldExtras.forEach(el => el.remove());
             
-            const newText = prompt('Edit task:', todo.text);
-            if (newText !== null && newText.trim() !== '') {
-                todo.text = newText.trim();
-                saveTodos();
-            }
+            const container = document.getElementById('tasksContainer');
+            const addBtn = document.querySelector('.add-task-btn');
+            
+            extraTasks.forEach((task, idx) => {
+                const line = document.createElement('div');
+                line.className = 'task-line extra';
+                line.innerHTML = `
+                    <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleExtraTask(${idx})">${task.completed ? '✓' : ''}</div>
+                    <input type="text" class="task-input" value="${task.text}" placeholder="Extra task..." onblur="saveExtraTasks()">
+                    <button class="task-delete" onclick="deleteExtraTask(${idx})">×</button>
+                `;
+                container.insertBefore(line, addBtn);
+            });
         }
 
-        function deleteTodo(id) {
-            todos = todos.filter(t => t.id !== id);
-            saveTodos();
+        function addNewTaskLine() {
+            extraTasks.push({ text: '', completed: false });
+            localStorage.setItem('mc_extraTasks', JSON.stringify(extraTasks));
+            renderExtraTasks();
+        }
+
+        function toggleExtraTask(idx) {
+            extraTasks[idx].completed = !extraTasks[idx].completed;
+            if (extraTasks[idx].completed && extraTasks[idx].text.trim()) {
+                completedTasksDB.push({
+                    text: extraTasks[idx].text.trim(),
+                    completedAt: new Date().toISOString()
+                });
+                localStorage.setItem('mc_completedDB', JSON.stringify(completedTasksDB));
+            }
+            localStorage.setItem('mc_extraTasks', JSON.stringify(extraTasks));
+            renderExtraTasks();
+        }
+
+        function saveExtraTasks() {
+            const extraLines = document.querySelectorAll('.task-line.extra');
+            extraLines.forEach((line, idx) => {
+                const input = line.querySelector('.task-input');
+                const checkbox = line.querySelector('.task-checkbox');
+                if (extraTasks[idx]) {
+                    extraTasks[idx].text = input ? input.value : '';
+                    extraTasks[idx].completed = checkbox ? checkbox.classList.contains('checked') : false;
+                }
+            });
+            localStorage.setItem('mc_extraTasks', JSON.stringify(extraTasks));
+        }
+
+        function deleteExtraTask(idx) {
+            extraTasks.splice(idx, 1);
+            localStorage.setItem('mc_extraTasks', JSON.stringify(extraTasks));
+            renderExtraTasks();
         }
 
         function clearCompletedTodos() {
-            const completed = todos.filter(t => t.completed);
-            todos = todos.filter(t => !t.completed);
-            saveTodos();
+            // Clear completed from fixed tasks
+            for (let i = 0; i < 5; i++) {
+                const checkbox = document.getElementById(`task-check-${i}`);
+                const input = document.getElementById(`task-input-${i}`);
+                if (checkbox && checkbox.classList.contains('checked')) {
+                    checkbox.classList.remove('checked');
+                    checkbox.innerHTML = '';
+                    if (input) input.value = '';
+                }
+            }
+            fixedTasks = fixedTasks.map(t => ({ text: t.completed ? '' : t.text, completed: false }));
+            localStorage.setItem('mc_fixedTasks', JSON.stringify(fixedTasks));
+            
+            // Clear completed from extra tasks
+            extraTasks = extraTasks.filter(t => !t.completed);
+            localStorage.setItem('mc_extraTasks', JSON.stringify(extraTasks));
+            renderExtraTasks();
         }
 
-        // Show completed tasks history and analytics
         function showCompletedHistory() {
             const now = new Date();
             const thisMonth = completedTasksDB.filter(t => {
@@ -780,14 +904,12 @@
             const thisMonthCount = thisMonth.length;
             const avgPerDay = thisMonthCount > 0 ? (thisMonthCount / now.getDate()).toFixed(1) : 0;
             
-            // Simple analytics
             const criticalKeywords = ['trading', 'job', 'apply', 'interview', 'urgent', 'important'];
             const criticalTasks = thisMonth.filter(t => 
                 criticalKeywords.some(kw => t.text.toLowerCase().includes(kw))
             );
             
-            const message = `
-📊 TASK ANALYTICS
+            const message = `📊 TASK ANALYTICS
 
 This Month: ${thisMonthCount} tasks completed
 Total History: ${totalCompleted} tasks
@@ -797,52 +919,61 @@ Avg per day: ${avgPerDay}
 ${criticalTasks.slice(0, 5).map(t => '• ' + t.text).join('\n')}
 
 📈 Recent Completed:
-${thisMonth.slice(-5).map(t => '✓ ' + t.text.substring(0, 30)).join('\n')}
-
-(Full database in localStorage - will be SQL later)`;
+${thisMonth.slice(-5).map(t => '✓ ' + t.text.substring(0, 30)).join('\n')}`;
             
             alert(message);
         }
 
-        // CALENDAR NOTES DATA
+        // CALENDAR - CLEAN IMPLEMENTATION
         let dateNotes = JSON.parse(localStorage.getItem('mc_dateNotes')) || {};
         let selectedDate = null;
 
-        // CALENDAR GENERATION
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            generateCalendar();
+        }
+
+        function resetToToday() {
+            currentCalendarDate = new Date();
+            generateCalendar();
+        }
+
         function generateCalendar() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
-            const today = now.getDate();
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            const today = new Date();
+            const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
             
             const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             document.getElementById('calendarMonth').textContent = monthNames[month] + ' ' + year;
             
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             
-            let html = dayNames.map(d => `<div class="calendar-day">${d}</div>`).join('');
+            let html = dayNames.map(d => `<div class="calendar-day-header">${d}</div>`).join('');
             
+            // Empty cells for days before month starts
             for (let i = 0; i < firstDay; i++) {
                 html += '<div></div>';
             }
             
+            // Days
             for (let day = 1; day <= daysInMonth; day++) {
-                const isToday = day === today;
+                const isToday = isCurrentMonth && day === today.getDate();
                 const dateKey = `${year}-${month}-${day}`;
                 const dayNotes = dateNotes[dateKey] || [];
                 const hasNote = dayNotes.length > 0;
-                const notePreview = hasNote ? dayNotes[0].text : '';
+                const noteText = hasNote ? dayNotes[0].text.substring(0, 8) + (dayNotes[0].text.length > 8 ? '...' : '') : '';
                 
-                const classes = ['calendar-date'];
+                const classes = ['calendar-day-cell'];
                 if (isToday) classes.push('today');
                 if (hasNote) classes.push('has-note');
                 
                 html += `
-                    <div class="${classes.join(' ')}" onclick="openDateModal(${day})">
+                    <div class="${classes.join(' ')}" onclick="openDateModal(${day})" title="${hasNote ? dayNotes[0].text : 'Click to add note'}">
                         <span class="calendar-day-number">${day}</span>
-                        ${hasNote ? `<span class="calendar-note-preview" title="${notePreview}">${notePreview}</span>` : ''}
+                        ${hasNote ? `<span class="calendar-note-indicator">📝 ${noteText}</span>` : ''}
                     </div>
                 `;
             }
@@ -852,16 +983,18 @@ ${thisMonth.slice(-5).map(t => '✓ ' + t.text.substring(0, 30)).join('\n')}
 
         function openDateModal(day) {
             selectedDate = day;
-            const now = new Date();
-            const dateKey = `${now.getFullYear()}-${now.getMonth()}-${day}`;
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            const dateKey = `${year}-${month}-${day}`;
             const notes = dateNotes[dateKey] || [];
             
-            document.getElementById('dateModalTitle').textContent = `February ${day}, 2026`;
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('dateModalTitle').textContent = `${monthNames[month]} ${day}, ${year}`;
             document.getElementById('dateNoteInput').value = '';
             
             const notesList = document.getElementById('dateNotesList');
             if (notes.length === 0) {
-                notesList.innerHTML = '<div class="todo-empty">No notes for this date</div>';
+                notesList.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: var(--spacing-md);">No notes for this date</div>';
             } else {
                 notesList.innerHTML = notes.map((note, idx) => `
                     <div class="date-note-item">
@@ -888,8 +1021,9 @@ ${thisMonth.slice(-5).map(t => '✓ ' + t.text.substring(0, 30)).join('\n')}
             const text = input.value.trim();
             if (!text) return;
             
-            const now = new Date();
-            const dateKey = `${now.getFullYear()}-${now.getMonth()}-${selectedDate}`;
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            const dateKey = `${year}-${month}-${selectedDate}`;
             
             if (!dateNotes[dateKey]) {
                 dateNotes[dateKey] = [];
@@ -910,8 +1044,9 @@ ${thisMonth.slice(-5).map(t => '✓ ' + t.text.substring(0, 30)).join('\n')}
         function deleteDateNote(idx) {
             if (!selectedDate) return;
             
-            const now = new Date();
-            const dateKey = `${now.getFullYear()}-${now.getMonth()}-${selectedDate}`;
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            const dateKey = `${year}-${month}-${selectedDate}`;
             
             if (dateNotes[dateKey]) {
                 dateNotes[dateKey].splice(idx, 1);
@@ -964,14 +1099,19 @@ Want me to integrate any of these?`;
             alert(info);
         }
 
-        // INIT
-        loadBriefing();
-        fetchCryptoPrices();
-        updateClock();
-        generateCalendar();
-        renderTodos();
-        setInterval(updateClock, 1000);
-        setInterval(fetchCryptoPrices, 300000); // Refresh every 5 minutes
+        // INIT - Auto-load everything
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBriefing();
+            updateClock();
+            generateCalendar();
+            loadFixedTasks();
+            
+            // Auto-fetch crypto prices after a short delay
+            setTimeout(fetchCryptoPrices, 500);
+            
+            setInterval(updateClock, 1000);
+            setInterval(fetchCryptoPrices, 300000); // Refresh every 5 minutes
+        });
     </script>
 </body>
 </html>
