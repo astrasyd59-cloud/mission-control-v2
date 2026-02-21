@@ -998,7 +998,8 @@
             { text: 'Scrape Twitter/X for trading news', priority: 'low', completed: false },
             { text: 'Integrate Google API for news feed', priority: 'low', completed: false },
             { text: 'Talk to Claude to get memory bulletproof', priority: 'critical', completed: false },
-            { text: 'Complete all interview questions about me', priority: 'high', completed: false }
+            { text: 'Complete all interview questions about me', priority: 'high', completed: false },
+            { text: 'Research Etsy competitor SavageLabs OpenClaw Dashboard — analyze pricing/features for side hustle', priority: 'high', completed: false }
         ];
 
         // ============================================
@@ -1012,26 +1013,19 @@
         let newTaskPriority = 'medium';
         
         // Task Data
-        let taskData = JSON.parse(localStorage.getItem('mc_tasksData_v5')) || {
-            version: 'v5',
+        let taskData = JSON.parse(localStorage.getItem('mc_tasksData_v6')) || {
+            version: 'v6',
             tasks: [...DEFAULT_TASKS]
         };
         let completedTasksDB = JSON.parse(localStorage.getItem('mc_completedDB')) || [];
 
-        // Ensure migration to v5
-        if (taskData.version !== 'v5') {
+        // Ensure migration to v6
+        if (taskData.version !== 'v6') {
             taskData = {
-                version: 'v5',
+                version: 'v6',
                 tasks: [...DEFAULT_TASKS]
             };
-            localStorage.setItem('mc_tasksData_v5', JSON.stringify(taskData));
-        }
-        if (taskData.version !== 'v4') {
-            taskData = {
-                version: 'v4',
-                tasks: [...DEFAULT_TASKS]
-            };
-            localStorage.setItem('mc_tasksData_v4', JSON.stringify(taskData));
+            localStorage.setItem('mc_tasksData_v6', JSON.stringify(taskData));
         }
 
         // ============================================
@@ -1336,7 +1330,7 @@
                     taskData.tasks[index].text = input.value;
                 }
             });
-            localStorage.setItem('mc_tasksData_v5', JSON.stringify(taskData));
+            localStorage.setItem('mc_tasksData_v6', JSON.stringify(taskData));
         }
         
         function clearCompletedTodos() {
