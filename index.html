@@ -5,49 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="cache-control" content="no-cache">
     <title>Mission Control | Dibs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* LUXURY DARK THEME - OPTION B */
         :root {
-            --bg-primary: #050508;
-            --bg-secondary: rgba(13, 13, 18, 0.95);
-            --bg-glass: rgba(26, 26, 37, 0.6);
-            --border-glass: rgba(255, 255, 255, 0.06);
-            --accent-primary: #FF6B35;
-            --accent-glow: rgba(255, 107, 53, 0.3);
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
+            /* Base Colors - Rich Charcoal */
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #0f0f12;
+            --bg-tertiary: #141418;
+            --bg-glass: rgba(20, 20, 24, 0.85);
+            
+            /* Luxury Accents - Gold & Amber */
+            --accent-gold: #fbbf24;
+            --accent-amber: #f59e0b;
+            --accent-bronze: #d97706;
+            --accent-gold-glow: rgba(251, 191, 36, 0.25);
+            --accent-amber-glow: rgba(245, 158, 11, 0.2);
+            
+            /* Text Colors */
+            --text-primary: #fafaf9;
+            --text-secondary: #e7e5e4;
+            --text-muted: #a8a29e;
+            --text-gold: #fbbf24;
+            
+            /* Status Colors */
             --success: #22c55e;
+            --success-glow: rgba(34, 197, 94, 0.2);
             --warning: #f59e0b;
             --danger: #ef4444;
             --info: #3b82f6;
+            
+            /* Spacing */
             --spacing-xs: 0.5rem;
             --spacing-sm: 0.75rem;
             --spacing-md: 1rem;
             --spacing-lg: 1.5rem;
-            --spacing-xl: 2.5rem;
-            --radius-sm: 8px;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            /* Border Radius */
+            --radius-sm: 6px;
             --radius-md: 12px;
             --radius-lg: 16px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-xl: 24px;
+            
+            /* Transitions */
+            --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
             line-height: 1.6;
+            background-image: 
+                radial-gradient(ellipse at top, rgba(251, 191, 36, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(245, 158, 11, 0.02) 0%, transparent 40%);
         }
+
+        /* HEADER - Luxury Glass */
         .header {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(5, 5, 8, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-glass);
+            background: linear-gradient(180deg, rgba(10, 10, 12, 0.98) 0%, rgba(15, 15, 18, 0.95) 100%);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.1);
             padding: var(--spacing-md) var(--spacing-xl);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
         }
+
         .header-content {
             max-width: 1600px;
             margin: 0 auto;
@@ -56,180 +88,491 @@
             justify-content: space-between;
             gap: var(--spacing-lg);
         }
+
         .logo {
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
-            font-size: 1.25rem;
-            font-weight: 700;
         }
+
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--accent-primary), #ff8f5a);
-            border-radius: var(--radius-sm);
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 50%, var(--accent-bronze) 100%);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.25rem;
+            box-shadow: 0 0 20px var(--accent-gold-glow);
+            position: relative;
+            overflow: hidden;
         }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .logo-text {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-subtext {
+            font-size: 0.6875rem;
+            color: var(--accent-amber);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 600;
+        }
+
+        /* NAVIGATION */
         .nav-tabs {
             display: flex;
             gap: var(--spacing-xs);
-            background: var(--bg-glass);
+            background: rgba(20, 20, 24, 0.6);
             padding: 4px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(251, 191, 36, 0.08);
         }
+
         .nav-tab {
             padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.875rem;
+            transition: var(--transition-base);
+            font-size: 0.8125rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             border: none;
             background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            position: relative;
         }
-        .nav-tab:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.05); }
-        .nav-tab.active { background: var(--accent-primary); color: white; box-shadow: 0 4px 20px var(--accent-glow); }
+
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: rgba(251, 191, 36, 0.05);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+            color: var(--accent-gold);
+            box-shadow: 0 0 20px var(--accent-gold-glow), inset 0 1px 0 rgba(251, 191, 36, 0.2);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        /* MAIN CONTENT */
         .main-content {
             max-width: 1600px;
             margin: 0 auto;
             padding: var(--spacing-xl);
         }
+
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .welcome-bar {
-            background: var(--bg-glass);
-            border: 1px solid var(--border-glass);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
+        .tab-content.active { display: block; animation: fadeInUp 0.5s ease-out; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HERO SECTION */
+        .hero-section {
+            position: relative;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
             margin-bottom: var(--spacing-xl);
+            overflow: hidden;
+            border: 1px solid rgba(251, 191, 36, 0.1);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--accent-gold) 50%, transparent 100%);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            filter: blur(2px) saturate(0.8);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .welcome-text h1 { font-size: 1.75rem; font-weight: 600; margin-bottom: 0.25rem; }
-        .welcome-text .subtitle { color: var(--text-secondary); font-size: 0.9375rem; }
-        .datetime { text-align: right; }
-        .time { font-size: 2rem; font-weight: 700; color: var(--accent-primary); font-variant-numeric: tabular-nums; }
-        .date { color: var(--text-secondary); font-size: 0.875rem; }
-        
-        .section {
-            background: var(--bg-glass);
-            border: 1px solid var(--border-glass);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
-            margin-bottom: var(--spacing-xl);
+
+        .hero-greeting {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 50%, var(--accent-amber) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .hero-status {
+            display: flex;
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--accent-gold);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px var(--accent-gold-glow);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
+        }
+
+        .hero-datetime {
+            text-align: right;
+        }
+
+        .hero-time {
+            font-size: 3rem;
+            font-weight: 200;
+            color: var(--accent-gold);
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.05em;
+            text-shadow: 0 0 30px var(--accent-gold-glow);
+        }
+
+        .hero-date {
+            font-size: 0.9375rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* SECTION CARDS */
+        .section {
+            background: linear-gradient(135deg, rgba(20, 20, 24, 0.9) 0%, rgba(15, 15, 18, 0.95) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.08);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(251, 191, 36, 0.3) 50%, transparent 100%);
+        }
+
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.1);
         }
+
         .section-title {
-            font-size: 1.125rem;
-            font-weight: 600;
+            font-size: 1.25rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
+            color: var(--text-primary);
         }
+
+        .section-title-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        /* BUTTONS */
         .btn {
-            background: var(--accent-primary);
-            color: white;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%);
+            color: var(--bg-primary);
             border: none;
-            border-radius: var(--radius-sm);
-            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-sm) var(--spacing-lg);
             font-size: 0.875rem;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
+            transition: var(--transition-base);
+            box-shadow: 0 4px 20px var(--accent-gold-glow);
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 20px var(--accent-glow); }
-        .btn-secondary { background: rgba(255, 255, 255, 0.1); }
-        .btn-secondary:hover { background: rgba(255, 255, 255, 0.15); }
-        
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-gold-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-gold);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(251, 191, 36, 0.1);
+            box-shadow: 0 4px 20px var(--accent-gold-glow);
+        }
+
+        /* NEWS ITEMS - Luxury Style */
         .news-item {
             display: flex;
             gap: var(--spacing-md);
-            padding: var(--spacing-sm);
-            background: rgba(255,255,255,0.03);
-            border-radius: var(--radius-sm);
-            border-left: 3px solid var(--accent-primary);
-            margin-bottom: 8px;
+            padding: var(--spacing-md);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.03) 0%, rgba(245, 158, 11, 0.02) 100%);
+            border-radius: var(--radius-md);
+            border-left: 3px solid var(--accent-gold);
+            margin-bottom: var(--spacing-sm);
+            transition: var(--transition-base);
+            border: 1px solid rgba(251, 191, 36, 0.05);
+            border-left-width: 3px;
         }
-        .news-number { font-weight: 700; color: var(--accent-primary); min-width: 24px; }
+
+        .news-item:hover {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.06) 0%, rgba(245, 158, 11, 0.04) 100%);
+            transform: translateX(4px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .news-number {
+            font-weight: 800;
+            color: var(--accent-gold);
+            font-size: 1.125rem;
+            min-width: 28px;
+            text-align: center;
+            text-shadow: 0 0 10px var(--accent-gold-glow);
+        }
+
         .news-content { flex: 1; }
-        .news-title { font-weight: 600; font-size: 0.9375rem; margin-bottom: 2px; }
-        .news-summary { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 2px; }
-        .news-meta { display: flex; justify-content: space-between; align-items: center; }
-        .news-category {
+
+        .news-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .news-summary {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .news-source {
             font-size: 0.75rem;
             color: var(--text-muted);
-            background: var(--bg-glass);
-            padding: 2px 8px;
-            border-radius: 4px;
         }
+
+        .news-category {
+            font-size: 0.6875rem;
+            color: var(--accent-gold);
+            background: rgba(251, 191, 36, 0.1);
+            padding: 3px 10px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        /* QUOTE BOX */
         .quote-box {
-            margin-top: var(--spacing-md);
-            padding: var(--spacing-md);
-            background: rgba(255,107,53,0.1);
-            border-left: 3px solid var(--accent-primary);
-            border-radius: var(--radius-sm);
+            margin-top: var(--spacing-lg);
+            padding: var(--spacing-lg);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: var(--radius-md);
             font-style: italic;
             color: var(--text-secondary);
+            font-size: 1.125rem;
+            line-height: 1.6;
+            position: relative;
         }
-        
+
+        .quote-box::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--accent-gold);
+            opacity: 0.3;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-family: Georgia, serif;
+        }
+
+        /* METRIC CARDS */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: var(--spacing-lg);
             margin-bottom: var(--spacing-xl);
         }
+
         .metric-card {
-            background: var(--bg-glass);
-            border: 1px solid var(--border-glass);
+            background: linear-gradient(135deg, rgba(20, 20, 24, 0.95) 0%, rgba(15, 15, 18, 0.98) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.1);
             border-radius: var(--radius-lg);
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl);
             position: relative;
             overflow: hidden;
-            transition: var(--transition);
+            transition: var(--transition-base);
         }
-        .metric-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(251, 191, 36, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--accent-gold-glow);
+        }
+
         .metric-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: var(--accent-primary);
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--accent-gold) 50%, transparent 100%);
         }
+
         .metric-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-sm);
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             margin-bottom: var(--spacing-md);
-            background: rgba(255, 107, 53, 0.1);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            box-shadow: 0 0 20px var(--accent-gold-glow);
         }
-        .metric-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.25rem; }
-        .metric-value { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
-        .metric-trend { font-size: 0.75rem; }
+
+        .metric-label {
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: var(--spacing-xs);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-trend {
+            font-size: 0.8125rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .trend-up { color: var(--success); }
-        
-        @media (max-width: 768px) {
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
             .cards-grid { grid-template-columns: repeat(2, 1fr); }
-            .welcome-bar { flex-direction: column; align-items: flex-start; }
         }
+
+        @media (max-width: 768px) {
+            .hero-content { flex-direction: column; align-items: flex-start; gap: var(--spacing-lg); }
+            .hero-time { font-size: 2rem; }
+            .hero-greeting { font-size: 1.75rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .nav-tabs { overflow-x: auto; flex-wrap: nowrap; }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: rgba(251, 191, 36, 0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(251, 191, 36, 0.4); }
     </style>
 </head>
 <body>
@@ -237,7 +580,10 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">🗡️</div>
-                <span>Mission Control</span>
+                <div>
+                    <div class="logo-text">Mission Control</div>
+                    <div class="logo-subtext">OpenClaw Empire</div>
+                </div>
             </div>
             <nav class="nav-tabs">
                 <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
@@ -251,40 +597,37 @@
     <main class="main-content">
         <!-- DASHBOARD TAB -->
         <div class="tab-content active" id="dashboard">
-            <!-- Smart Briefing Section -->
-            <div class="welcome-bar">
-                <div class="welcome-text">
-                    <h1 id="greeting">Loading...</h1>
-                    <p class="subtitle" id="subtitle"></p>
-                </div>
-                <div class="datetime">
-                    <div class="time" id="clock">--:--</div>
-                    <div class="date" id="date">--</div>
-                </div>
-            </div>
-
-            <!-- NEWS BRIEFING -->
-            <div class="section" id="newsSection">
-                <div class="section-header">
-                    <h2 class="section-title">📰 <span id="briefingTitle">Briefing</span>
-                    </h2>
-                    <button class="btn btn-secondary" onclick="loadBriefing()">↻ Refresh</button>
-                </div>
-                <div id="newsList">
-                    <!-- News items will be inserted here -->
-                </div>
-                <div class="quote-box" id="quoteBox">
-                    <!-- Quote will be inserted here -->
+            <!-- HERO SECTION -->
+            <div class="hero-section">
+                <div class="hero-bg"></div>
+                <div class="hero-content">
+                    <div>
+                        <h1 class="hero-greeting" id="greeting">Good afternoon, Dibs</h1>
+                        <p class="hero-subtitle" id="subtitle">Time to conquer today</p>
+                        <div class="hero-status">
+                            <div class="status-pill">
+                                <span class="status-dot"></span>
+                                <span>System Online</span>
+                            </div>
+                            <div class="status-pill">
+                                <span>🔥 7 Day Streak</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-datetime">
+                        <div class="hero-time" id="clock">12:46</div>
+                        <div class="hero-date" id="date">Saturday, February 21</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- METRICS -->
+            <!-- METRICS GRID -->
             <div class="cards-grid">
                 <div class="metric-card">
                     <div class="metric-icon">📈</div>
                     <div class="metric-label">Portfolio Goal</div>
                     <div class="metric-value">$32K</div>
-                    <div class="metric-trend trend-up">↑ 28% to $100K</div>
+                    <div class="metric-trend trend-up">↑ 28% to $100K target</div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-icon">📁</div>
@@ -301,29 +644,94 @@
                 <div class="metric-card">
                     <div class="metric-icon">🎯</div>
                     <div class="metric-label">Days to Goal</div>
-                    <div class="metric-value" id="daysToGoal">--</div>
+                    <div class="metric-value" id="daysToGoal">312</div>
                     <div class="metric-trend">Target: Dec 2025</div>
                 </div>
             </div>
-        </div>
 
-        <!-- PROJECTS TAB -->
-        <div class="tab-content" id="projects">
+            <!-- NEWS BRIEFING -->
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">📋 Project Board</h2>
-                    <button class="btn">+ New Task</button>
+                    <h2 class="section-title">
+                        <span class="section-title-icon">📰</span>
+                        <span id="briefingTitle">Afternoon Check-in</span>
+                    </h2>
+                    <button class="btn btn-secondary" onclick="loadBriefing()">↻ Refresh</button>
                 </div>
-                <p style="color: var(--text-secondary);">Project board coming soon...</p>
+                <div id="newsList">
+                    <div class="news-item">
+                        <div class="news-number">1</div>
+                        <div class="news-content">
+                            <div class="news-title">ETH staking rewards increase</div>
+                            <div class="news-summary">Annual yield now at 4.2%</div>
+                            <div class="news-meta">
+                                <span class="news-source">CoinTelegraph</span>
+                                <span class="news-category">Trading</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-number">2</div>
+                        <div class="news-content">
+                            <div class="news-title">AI coding assistants comparison</div>
+                            <div class="news-summary">Kimi leads in complex reasoning tasks</div>
+                            <div class="news-meta">
+                                <span class="news-source">The Verge</span>
+                                <span class="news-category">AI News</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-number">3</div>
+                        <div class="news-content">
+                            <div class="news-title">Side hustle income tax guide</div>
+                            <div class="news-summary">2026 tax updates for freelancers</div>
+                            <div class="news-meta">
+                                <span class="news-source">WSJ</span>
+                                <span class="news-category">Business</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-number">4</div>
+                        <div class="news-content">
+                            <div class="news-title">Solana ecosystem growth</div>
+                            <div class="news-summary">DeFi TVL up 15% this month</div>
+                            <div class="news-meta">
+                                <span class="news-source">Decrypt</span>
+                                <span class="news-category">Market</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-number">5</div>
+                        <div class="news-content">
+                            <div class="news-title">Time management for entrepreneurs</div>
+                            <div class="news-summary">Focus blocks vs Pomodoro technique</div>
+                            <div class="news-meta">
+                                <span class="news-source">Inc</span>
+                                <span class="news-category">Development</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="quote-box">
+                    Success is the sum of small efforts, repeated day in and day out.
+                </div>
             </div>
         </div>
 
-        <!-- REVENUE TAB -->
+        <!-- OTHER TABS (PLACEHOLDERS) -->
+        <div class="tab-content" id="projects">
+            <div class="section">
+                <h2 class="section-title"><span class="section-title-icon">📋</span>Project Board</h2>
+                <p style="color: var(--text-muted);">Project board coming soon...</p>
+            </div>
+        </div>
+
         <div class="tab-content" id="revenue">
             <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">💰 Revenue Tracker</h2>
-                </div>
+                <h2 class="section-title"><span class="section-title-icon">💰</span>Revenue Tracker</h2>
                 <div class="cards-grid">
                     <div class="metric-card">
                         <div class="metric-icon">💵</div>
@@ -349,104 +757,16 @@
             </div>
         </div>
 
-        <!-- NOTES TAB -->
         <div class="tab-content" id="notes">
             <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">📝 Notes</h2>
-                </div>
-                <textarea style="width: 100%; height: 300px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: var(--spacing-md); color: var(--text-primary); font-family: inherit; font-size: 0.9375rem; resize: vertical;"
-                    placeholder="Start writing..."></textarea>
+                <h2 class="section-title"><span class="section-title-icon">📝</span>Notes</h2>
+                <textarea style="width: 100%; height: 400px; background: rgba(251, 191, 36, 0.03); border: 1px solid rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); padding: var(--spacing-md); color: var(--text-primary); font-family: inherit; font-size: 0.9375rem; resize: vertical;"
+                    placeholder="Start writing your thoughts..."></textarea>
             </div>
         </div>
     </main>
 
     <script>
-        // BRIEFING DATA
-        const briefingData = {
-            morning: {
-                greeting: "Good morning, Dibs! ☀️",
-                subtitle: "Time to conquer today",
-                title: "Morning Briefing",
-                quote: "The best time to plant a tree was 20 years ago. The second best time is now.",
-                news: [
-                    { title: "Bitcoin breaks $42K resistance", source: "CoinDesk", category: "Trading", summary: "BTC shows strong momentum" },
-                    { title: "OpenClaw releases agent framework", source: "TechCrunch", category: "AI", summary: "100 parallel agents enabled" },
-                    { title: "Crypto market cap hits $1.6T", source: "Reuters", category: "Market", summary: "Bullish sentiment continues" },
-                    { title: "Remote work trends 2026", source: "Forbes", category: "Business", summary: "Trading from anywhere standard" },
-                    { title: "10 habits of successful traders", source: "Bloomberg", category: "Development", summary: "Discipline tops the list" }
-                ]
-            },
-            afternoon: {
-                greeting: "Good afternoon, Dibs! ☀️",
-                subtitle: "How's progress?",
-                title: "Afternoon Check-in",
-                quote: "Success is the sum of small efforts, repeated day in and day out.",
-                news: [
-                    { title: "ETH staking rewards increase", source: "CoinTelegraph", category: "Trading", summary: "Annual yield at 4.2%" },
-                    { title: "AI coding assistants comparison", source: "The Verge", category: "AI", summary: "Kimi leads in reasoning" },
-                    { title: "Side hustle tax guide", source: "WSJ", category: "Business", summary: "2026 tax updates" },
-                    { title: "Solana ecosystem growth", source: "Decrypt", category: "Market", summary: "DeFi TVL up 15%" },
-                    { title: "Time management for entrepreneurs", source: "Inc", category: "Development", summary: "Focus blocks technique" }
-                ]
-            },
-            evening: {
-                greeting: "Good evening, Dibs! 🌙",
-                subtitle: "Reflect and plan",
-                title: "Evening Review",
-                quote: "Rest when you're weary. Refresh and renew yourself.",
-                news: [
-                    { title: "Daily crypto wrap", source: "CoinDesk", category: "Trading", summary: "BTC +2.3%, ETH +1.8%" },
-                    { title: "OpenAI new model", source: "TechCrunch", category: "AI", summary: "Multimodal expanded" },
-                    { title: "Freelance economy 2026", source: "Forbes", category: "Business", summary: "Independent work up 23%" },
-                    { title: "Global markets mixed", source: "Reuters", category: "Market", summary: "Asia up, Europe flat" },
-                    { title: "Sleep and performance", source: "Harvard", category: "Development", summary: "Rest improves decisions 40%" }
-                ]
-            }
-        };
-
-        function getTimeOfDay() {
-            const hour = new Date().getHours();
-            if (hour >= 5 && hour < 12) return 'morning';
-            if (hour >= 12 && hour < 17) return 'afternoon';
-            return 'evening';
-        }
-
-        function loadBriefing() {
-            const timeOfDay = getTimeOfDay();
-            const data = briefingData[timeOfDay];
-            
-            document.getElementById('greeting').textContent = data.greeting;
-            document.getElementById('subtitle').textContent = data.subtitle;
-            document.getElementById('briefingTitle').textContent = data.title;
-            document.getElementById('quoteBox').textContent = data.quote;
-            
-            const newsList = document.getElementById('newsList');
-            newsList.innerHTML = data.news.map((item, index) => `
-                <div class="news-item">
-                    <div class="news-number">${index + 1}</div>
-                    <div class="news-content">
-                        <div class="news-title">${item.title}</div>
-                        <div class="news-summary">${item.summary}</div>
-                        <div class="news-meta">
-                            <span>${item.source}</span>
-                            <span class="news-category">${item.category}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-            document.getElementById('date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-            
-            const targetDate = new Date('2025-12-31');
-            const daysRemaining = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
-            document.getElementById('daysToGoal').textContent = daysRemaining > 0 ? daysRemaining : 0;
-        }
-
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -454,8 +774,15 @@
             event.target.classList.add('active');
         }
 
-        // INIT
-        loadBriefing();
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        }
+
+        function loadBriefing() {
+            alert('Refreshing briefing... (Live news API integration coming)');
+        }
+
         updateClock();
         setInterval(updateClock, 1000);
     </script>
